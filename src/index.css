@@ -1,0 +1,19 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+html, body {
+  margin: 0;
+}
+
+/* https://stackoverflow.com/a/45050338 */
+input,
+textarea,
+button,
+select,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+* {
+  user-select: none;
+}
