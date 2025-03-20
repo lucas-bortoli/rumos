@@ -9,5 +9,5 @@ export default function App() {
     cmp.push(HomeView, {});
   }, []);
 
-  return <button className="bg-amber-200">Hello</button>;
+  return null;
 }
