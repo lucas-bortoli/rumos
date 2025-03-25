@@ -1,7 +1,8 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
-html, body {
+html,
+body {
   margin: 0;
 }
 
@@ -11,9 +12,10 @@ textarea,
 button,
 select,
 a {
-    -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
 }
 
 * {
   user-select: none;
+  outline: none;
 }

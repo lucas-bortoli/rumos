@@ -7,7 +7,7 @@ export default function useBackButton(callback: () => void) {
   callbackRef.current = callback;
 
   useEffect(() => {
-    function handleBackButton(_event: BackButtonListenerEvent) {
+    function handleBackButton(_event: BackButtonListenerEvent | null) {
       callbackRef.current();
     }
 
@@ -19,8 +19,21 @@ export default function useBackButton(callback: () => void) {
       subscription = handle;
     });
 
+    // simulate back button with "Esc" key
+    const cancelEscKey = new AbortController();
+    document.addEventListener(
+      "keyup",
+      (event) => {
+        if (event.key === "Escape") handleBackButton(null);
+      },
+      {
+        signal: cancelEscKey.signal,
+      }
+    );
+
     return () => {
       subscription?.remove();
+      cancelEscKey.abort();
     };
   }, []);
 }

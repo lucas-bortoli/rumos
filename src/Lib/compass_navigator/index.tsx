@@ -1,132 +1,138 @@
-import { AnimationEvent, createContext, ReactNode, useContext, useState } from "react";
-import { cn } from "../class_names";
+import { AnimatePresence } from "framer-motion";
+import {
+  createContext,
+  Dispatch,
+  PropsWithChildren,
+  ReactNode,
+  useContext,
+  useMemo,
+  useReducer,
+} from "react";
 import sequence, { Sequence } from "../sequence_generator";
-import doSwitch from "../switch_expression";
-import style from "./style.module.css";
 import useBackButton from "./use_back_button";
+import WindowContainer from "./window_container";
 
-type RouteKey = Sequence;
-const makeRouteKey = sequence();
+export type WindowKey = Sequence;
+const makeWindowKey = sequence();
 
-interface Route<P> {
-  key: RouteKey;
-  kind: "screen" | "popup";
+export interface Window<P> {
+  key: WindowKey;
+  title: string;
+  backButton: boolean;
+  component: (props: P) => ReactNode;
   props: P;
-  state: "entering" | "normal" | "leaving";
-  systemBackButtonEnabled: boolean;
-  component: (props: P) => ReactNode | undefined;
 }
 
-interface CompassContext {
-  routeStack: Route<any>[];
-  push<P>(
-    component: (props: P) => ReactNode,
-    props: P,
-    options?: {
-      kind?: Route<P>["kind"];
-      systemBackButtonEnabled?: boolean;
-    }
-  ): void;
-  pop(): void;
+interface State {
+  windows: Window<any>[];
 }
 
-const CompassCtx = createContext<CompassContext | null>(null);
+type Action =
+  | { kind: "WmCreateWindow"; window: Window<any> }
+  | { kind: "WmRemoveWindow"; key: WindowKey }
+  | { kind: "WmUpdateWindow"; key: WindowKey; updates: Omit<Partial<Window<any>>, "key"> };
 
-export function CompassProvider(props: { children: ReactNode }) {
-  const [routeStack, setRouteStack] = useState<Route<any>[]>([]);
-
-  function setRouteState(routeKey: RouteKey, state: Route<any>["state"]) {
-    setRouteStack((stack) => stack.map((r) => (r.key === routeKey ? { ...r, state } : r)));
-  }
-
-  const compass: CompassContext = {
-    routeStack,
-    push: (component, props, options) => {
-      const route = {
-        key: makeRouteKey(),
-        kind: options?.kind ?? "screen",
-        systemBackButtonEnabled: options?.systemBackButtonEnabled ?? true,
-        component,
-        props,
-        state: "entering",
-      } satisfies Route<any>;
-
-      console.log("Route push");
-      setRouteStack((routeStack) => [...routeStack, route]);
-    },
-    pop: () => {
-      const targetRoute = routeStack.at(-1);
-      if (!targetRoute) {
-        console.warn("Tried to pop off a route, but there are no routes on the stack.");
-        return;
-      }
-
-      console.log("Route pop");
-      setRouteState(targetRoute.key, "leaving");
-    },
+function reducer(state: State, action: Action): State {
+  const getWindow = (key: WindowKey) => {
+    const found = state.windows.find((win) => win.key === key);
+    if (!found) throw new Error(`Window ${key} not found.`);
+    return found;
   };
 
-  function handleAnimationEndOnRoute(routeKey: Sequence, event: AnimationEvent) {
-    console.log("Animation End", routeKey, event.animationName);
-    switch (event.animationName) {
-      case style.AnimationRouteScreenEnter:
-      case style.AnimationRoutePopupEnter:
-        setRouteState(routeKey, "normal");
-        break;
-      case style.AnimationRouteScreenLeave:
-      case style.AnimationRoutePopupLeave:
-        setRouteStack((routeStack) => routeStack.filter((r) => r.key !== routeKey));
-        break;
+  switch (action.kind) {
+    case "WmCreateWindow": {
+      return {
+        ...state,
+        windows: [...state.windows, { ...action.window }],
+      };
+    }
+    case "WmRemoveWindow": {
+      return {
+        ...state,
+        windows: [...state.windows.filter((win) => win.key !== action.key)],
+      };
+    }
+    case "WmUpdateWindow": {
+      const updated = { ...getWindow(action.key), ...action.updates };
+
+      return {
+        ...state,
+        windows: [...state.windows.filter((win) => win.key !== action.key), updated],
+      };
     }
   }
+}
+
+const initialState: State = { windows: [] };
+
+const context = createContext<{ state: State; dispatch: Dispatch<Action> }>({
+  state: initialState,
+  dispatch: () => null,
+});
+
+export function WindowManagerProvider(props: PropsWithChildren) {
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useBackButton(() => {
-    if (routeStack.at(-1)?.systemBackButtonEnabled === false) {
-      return;
+    const topmostWindow = state.windows.at(-1);
+    if (topmostWindow && state.windows.length > 1 && topmostWindow.backButton) {
+      dispatch({ kind: "WmRemoveWindow", key: topmostWindow.key });
     }
-
-    requestAnimationFrame(() => compass.pop());
   });
 
+  return <context.Provider value={{ state, dispatch }}>{props.children}</context.Provider>;
+}
+
+export function WindowsOutlet() {
+  const { state } = useContext(context);
+
+  // Sort windows array so they are always in a stable order. We need to do this because if the order changes, React re-renders the window DOM element, losing things like scroll positions in the application (even if the key is the same)
+  const windows = state.windows.slice().toSorted((a, b) => a.key - b.key);
+
   return (
-    <CompassCtx.Provider value={compass}>
-      {props.children}
-      {routeStack.map((route) => {
-        const animationClass = doSwitch(route.state, {
-          normal: style.routeWhenNormal,
-          entering: style.routeWhenEntering,
-          leaving: style.routeWhenLeaving,
-        });
-
-        const kindClass = doSwitch(route.kind, {
-          screen: style.kindScreen,
-          popup: style.kindPopup,
-        });
-
-        return (
-          <section
-            key={route.key}
-            onAnimationEnd={handleAnimationEndOnRoute.bind(null, route.key)}
-            className={cn(
-              "fixed left-0 top-0 h-full w-full",
-              style.route,
-              animationClass,
-              kindClass
-            )}>
-            <route.component {...route.props} />
-          </section>
-        );
-      })}
-    </CompassCtx.Provider>
+    <div className="relative z-0 h-[100lvh] w-[100lvw] overflow-hidden">
+      <AnimatePresence>
+        {windows.map((window, index) => {
+          return <WindowContainer key={window.key} window={window} zIndex={index} />;
+        })}
+      </AnimatePresence>
+    </div>
   );
 }
 
-export function useCompass() {
-  const ctx = useContext(CompassCtx);
+/**
+ * The useWindowing hook. This is the WindowManager's public API.
+ */
+export function useWindowing() {
+  const wm = useContext(context);
 
-  if (!ctx) {
-    throw new Error("useCompass must be used within a <Compass />");
-  }
+  return useMemo(() => {
+    function createWindow<P extends object>(options: {
+      component: (props: P) => ReactNode | null;
+      props: P;
+      title: string;
+      backButton?: boolean;
+    }) {
+      const window = {
+        key: makeWindowKey(),
+        title: options.title,
+        component: options.component,
+        props: options.props,
+        backButton: options.backButton ?? true,
+      } satisfies Window<P>;
 
-  return ctx!;
+      wm.dispatch({ kind: "WmCreateWindow", window });
+
+      return window.key;
+    }
+
+    function removeSpecificWindow(key: WindowKey) {
+      wm.dispatch({ kind: "WmRemoveWindow", key });
+    }
+
+    return {
+      createWindow,
+      removeSpecificWindow,
+    };
+  }, [wm.state]);
 }
