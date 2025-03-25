@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect } from "react";
+import Frame from "../../Components/Frame";
 import { cn } from "../../Lib/class_names";
 import { useWindowing } from "../../Lib/compass_navigator";
 import QAView from "../qa_view";
@@ -45,10 +46,22 @@ export default function HomeView() {
       <nav className="sticky top-0 z-10 my-8 flex items-center gap-2 border-b border-gray-200 bg-white p-4">
         <h1 className="text-xl">Home</h1>
       </nav>
+      <Frame className="m-4 flex flex-col items-stretch gap-2 p-2">
+        <h1 className="text-center text-xl font-semibold">Olá, mundo</h1>
+        <p>Seja bem-vindo ao Rumos!</p>
+        <footer className="flex gap-2">
+          <button className="bg-grey-300 shadow-pixel-sm border-grey-800 grow basis-0 border p-2">
+            Cancelar
+          </button>
+          <button className="bg-grey-300 shadow-pixel-sm border-grey-800 grow basis-0 border p-2">
+            Confirmar
+          </button>
+        </footer>
+      </Frame>
       {trilhas.map((trilha) => (
         <section className="flex flex-col gap-2 py-2" key={trilha.titulo}>
           <h2 className="px-4 text-xl">{trilha.titulo}</h2>
-          <ul className="flex h-64 w-full overflow-x-scroll pb-2 before:mr-4 after:ml-4">
+          <ul className="flex h-64 w-full overflow-x-scroll py-2 pb-2 before:mr-4 after:ml-4">
             {trilha.modulos.map((modulo) => (
               <motion.li
                 key={modulo.titulo}
