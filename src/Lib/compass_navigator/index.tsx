@@ -107,6 +107,10 @@ export function useWindowing() {
   const wm = useContext(context);
 
   return useMemo(() => {
+    const windows: ReadonlyMap<WindowKey, Window<any>> = new Map(
+      wm.state.windows.map((win) => [win.key, win])
+    );
+
     function createWindow<P extends object>(options: {
       component: (props: P) => ReactNode | null;
       props: P;
@@ -131,6 +135,7 @@ export function useWindowing() {
     }
 
     return {
+      windows,
       createWindow,
       removeSpecificWindow,
     };

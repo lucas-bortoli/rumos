@@ -1,5 +1,6 @@
 import { motion, Variant } from "framer-motion";
 import type { Window } from "..";
+import { CurrentWindowKeyProvider } from "./current_window_key_context";
 
 interface WindowContainerProps<P> {
   window: Window<P>;
@@ -38,11 +39,14 @@ export default function WindowContainer<P extends object>({
     <motion.div
       className="absolute top-0 left-0 h-full w-full"
       style={{ zIndex }}
+      data-window-key={window.key}
       initial="enter"
       animate="active"
       exit="exit"
       variants={screenVariants}>
-      <window.component {...window.props} />
+      <CurrentWindowKeyProvider windowKey={window.key}>
+        <window.component {...window.props} />
+      </CurrentWindowKeyProvider>
     </motion.div>
   );
 }
