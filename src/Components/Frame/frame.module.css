@@ -1,8 +1,7 @@
 .frame {
   background-color: #fff;
-  border-image: url("./frame.png") 12 round repeat;
-  border-image-width: 12px;
-  border-width: 12px;
+  border-image: url("./frame.png") 14 round repeat;
+  border-image-width: 14px;
   image-rendering: crisp-edges;
 }
 

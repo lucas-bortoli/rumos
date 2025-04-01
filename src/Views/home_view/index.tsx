@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect } from "react";
-import Frame from "../../Components/Frame";
+import SvgIcon from "../../Components/SvgIcon";
 import { cn } from "../../Lib/class_names";
 import { useWindowing } from "../../Lib/compass_navigator";
 import QAView from "../qa_view";
@@ -13,6 +13,7 @@ interface Trilha {
   modulos: {
     background: string;
     titulo: string;
+    disabled?: boolean;
   }[];
 }
 
@@ -26,48 +27,46 @@ export default function HomeView() {
 
   const trilhas: Trilha[] = [
     {
-      titulo: "Meu primeiro automóvel",
-      modulos: [
-        { titulo: "Descobrindo o IPVA", background: Trilha01 },
-        { titulo: "Tipos de financiamento", background: Trilha02 },
-      ],
-    },
-    {
-      titulo: "Morar sozinho, e agora?",
+      titulo: "Morando sozinho, e agora?",
       modulos: [
         { titulo: "Descobrindo o IPVA", background: Trilha01 },
         { titulo: "Tipos de financiamento", background: Trilha01 },
+        { titulo: "Tipos de financiamento", background: Trilha01 },
+        { titulo: "Tipos de financiamento", background: Trilha01 },
+        { titulo: "Tipos de financiamento", background: Trilha01 },
+      ],
+    },
+    {
+      titulo: "Meu primeiro automóvel",
+      modulos: [
+        { titulo: "Descobrindo o IPVA", background: Trilha01, disabled: true },
+        { titulo: "Tipos de financiamento", background: Trilha02, disabled: true },
+        { titulo: "Tipos de financiamento", background: Trilha02, disabled: true },
+        { titulo: "Tipos de financiamento", background: Trilha02, disabled: true },
+        { titulo: "Tipos de financiamento", background: Trilha02, disabled: true },
       ],
     },
   ];
 
   return (
-    <main className="relative h-full w-full overflow-x-hidden overflow-y-scroll bg-white pb-18">
-      <nav className="sticky top-0 z-10 my-8 flex items-center gap-2 border-b border-gray-200 bg-white p-4">
-        <h1 className="text-xl">Home</h1>
+    <main className="relative h-full w-full overflow-x-hidden overflow-y-scroll bg-white pb-20">
+      <nav className="border-grey-200 sticky top-0 z-10 mt-8 mb-4 flex items-center gap-2 border-b bg-white p-4 pb-3">
+        <h1 className="text-xl">Minhas Trilhas</h1>
       </nav>
-      <Frame className="m-4 flex flex-col items-stretch gap-2 p-2">
-        <h1 className="text-center text-xl font-semibold">Olá, mundo</h1>
-        <p>Seja bem-vindo ao Rumos!</p>
-        <footer className="flex gap-2">
-          <button className="bg-grey-300 shadow-pixel-sm border-grey-800 grow basis-0 border p-2">
-            Cancelar
-          </button>
-          <button className="bg-grey-300 shadow-pixel-sm border-grey-800 grow basis-0 border p-2">
-            Confirmar
-          </button>
-        </footer>
-      </Frame>
+      <section className="px-4">
+        Aqui ficam as trilhas do conhecimento disponíveis. Você pode selecionar uma para iniciar!
+      </section>
       {trilhas.map((trilha) => (
-        <section className="flex flex-col gap-2 py-2" key={trilha.titulo}>
+        <section className="flex flex-col pt-2" key={trilha.titulo}>
           <h2 className="px-4 text-xl">{trilha.titulo}</h2>
-          <ul className="flex h-64 w-full overflow-x-scroll py-2 pb-2 before:mr-4 after:ml-4">
+          <ul className="flex h-60 w-full overflow-x-scroll py-2 before:mr-4 after:ml-4">
             {trilha.modulos.map((modulo) => (
               <motion.li
                 key={modulo.titulo}
                 whileTap={{ scale: 1.05 }}
                 className={cn(
                   "mr-2 flex aspect-[3/4] h-full shrink-0 flex-col justify-end overflow-hidden rounded-2xl p-4 text-gray-100 shadow-md",
+                  modulo.disabled && "opacity-20 shadow-none",
                   style.trilha_card
                 )}
                 style={{ "--card-bg": `url('${modulo.background}')` }}
@@ -77,14 +76,21 @@ export default function HomeView() {
                     props: {},
                     title: "QA",
                   })
-                }>
+                }
+                inert={modulo.disabled}>
                 <h3 className="w-2/3 text-lg font-semibold">{modulo.titulo}</h3>
               </motion.li>
             ))}
           </ul>
         </section>
       ))}
-      <footer className="fixed bottom-0 left-0 z-10 flex h-16 w-full items-center justify-between bg-amber-100 p-2"></footer>
+      <footer className="bg-grey-100 border-grey-200 fixed bottom-0 left-0 z-10 flex w-full items-center border-t px-16 py-4">
+        <div className="text-grey-400 flex h-12 w-full items-center justify-between">
+          <SvgIcon icon="Explore" />
+          <SvgIcon icon="AccountCircle" className="text-lime-600" />
+          <SvgIcon icon="BarChart" />
+        </div>
+      </footer>
     </main>
   );
 }
