@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import { useWindowing } from "./Lib/compass_navigator";
-import HomeView from "./Views/home_view";
+import BattleView from "./Views/battle_view";
 
 export default function App() {
   const windowing = useWindowing();
 
   useEffect(() => {
     const key = windowing.createWindow({
-      component: HomeView,
+      component: BattleView,
       props: {},
-      title: "Home View",
+      title: "Battle View",
     });
     return () => windowing.removeSpecificWindow(key);
   }, []);
