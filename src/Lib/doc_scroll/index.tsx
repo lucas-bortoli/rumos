@@ -1,5 +1,5 @@
 import { PropsWithChildren, useEffect, useLayoutEffect, useMemo, useRef } from "react";
-import { cn } from "../../Lib/class_names";
+import { cn } from "../class_names";
 import useZoom from "./useZoom";
 
 interface DocScrollProps extends PropsWithChildren {

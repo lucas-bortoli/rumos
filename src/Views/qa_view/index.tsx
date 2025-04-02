@@ -1,7 +1,9 @@
 import { motion, Variant } from "framer-motion";
 import Frame from "../../Components/Frame";
 import { cn } from "../../Lib/class_names";
-import DocScroll from "../doc_scroll";
+import { useWindowing } from "../../Lib/compass_navigator";
+import DocScroll from "../../Lib/doc_scroll";
+import BattleView from "../battle_view";
 import DocViewStyle from "./document.module.css";
 
 const MotionFrame = motion.create(Frame);
@@ -103,6 +105,17 @@ export default function QAView() {
 <p>1. Nome: _______ | CPF: ______</p>
 <p>2. Nome: _______ | CPF: ______</p>`;
 
+  const windowing = useWindowing();
+
+  function onCardClick() {
+    const key = windowing.createWindow({
+      component: BattleView,
+      props: {},
+      title: "Battle View",
+    });
+    return () => windowing.removeSpecificWindow(key);
+  }
+
   return (
     <main className="flex h-full w-full flex-col overflow-hidden bg-white">
       <nav className="flex items-center gap-2 border-b border-gray-200 bg-white p-4">
@@ -130,6 +143,7 @@ export default function QAView() {
                 <motion.li
                   key={card}
                   whileTap={{ scale: 1.05 }}
+                  onClick={onCardClick}
                   className="mr-2 flex aspect-[3/4] h-full shrink-0 flex-col items-stretch justify-end overflow-hidden rounded-lg bg-white p-4 text-gray-600 shadow-sm">
                   <h3 className="text-center text-lg">Carta</h3>
                 </motion.li>

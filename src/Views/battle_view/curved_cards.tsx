@@ -7,7 +7,7 @@ export default function CurvedCards() {
   const [cardTranslations, setCardTranslations] = useState<number[]>([]);
   const cards = [0, 1, 2, 3, 4, 5, 6, 7];
 
-  // Throttle the update function using requestAnimationFrame
+  // Update translations based on horizontal position
   const updateTranslations = useCallback(() => {
     if (!containerRef.current) return;
 
@@ -21,8 +21,8 @@ export default function CurvedCards() {
       const cardCenter = (cardRect.left + cardRect.right) / 2;
       const distance = Math.abs(containerCenter - cardCenter);
 
-      const maxLift = 30;
-      const factor = Math.max(0, 1 - distance / (containerRect.width / 2)) * 2;
+      const maxLift = 50;
+      const factor = Math.max(0, 1 - distance / (containerRect.width / 2)) * 0.6;
       const newY = -maxLift * factor;
 
       if (newY !== cardTranslations[i]) hasChanged = true;
@@ -32,30 +32,32 @@ export default function CurvedCards() {
     if (hasChanged) setCardTranslations(newTranslations);
   }, [cardTranslations]);
 
+  // Mouse wheel scrolls horizontally
   useEffect(() => {
-    let animationFrame: number;
-
-    const handleScroll = () => {
-      cancelAnimationFrame(animationFrame);
-      animationFrame = requestAnimationFrame(updateTranslations);
+    const handleWheel = (event: WheelEvent) => {
+      if (containerRef.current) {
+        event.preventDefault(); // Prevent vertical scroll
+        containerRef.current.scrollBy({ left: event.deltaY / 2 });
+      }
     };
 
     const handleResize = () => updateTranslations();
+    const container = containerRef.current;
 
-    if (containerRef.current) {
-      containerRef.current.addEventListener("scroll", handleScroll);
+    if (container) {
+      container.addEventListener("wheel", handleWheel, { passive: false });
+      container.addEventListener("scroll", updateTranslations);
     }
     window.addEventListener("resize", handleResize);
 
-    // Initial calculation
     updateTranslations();
 
     return () => {
-      if (containerRef.current) {
-        containerRef.current.removeEventListener("scroll", handleScroll);
+      if (container) {
+        container.removeEventListener("wheel", handleWheel);
+        container.removeEventListener("scroll", updateTranslations);
       }
       window.removeEventListener("resize", handleResize);
-      cancelAnimationFrame(animationFrame);
     };
   }, [updateTranslations]);
 
