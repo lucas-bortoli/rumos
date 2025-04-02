@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect } from "react";
+import useAlert from "../../Components/AlertDialog";
 import SvgIcon from "../../Components/SvgIcon";
 import { cn } from "../../Lib/class_names";
 import { useWindowing } from "../../Lib/compass_navigator";
@@ -11,6 +12,7 @@ import Trilha02 from "./trilha02.png";
 interface Trilha {
   titulo: string;
   modulos: {
+    id: number;
     background: string;
     titulo: string;
     disabled?: boolean;
@@ -19,31 +21,48 @@ interface Trilha {
 
 export default function HomeView() {
   const windowing = useWindowing();
+  const showAlert = useAlert();
+
+  function trilhaNotAvailable() {
+    showAlert({
+      title: "Trilha indisponível",
+      content: (
+        <p>Desculpe, essa trilha está indisponível na versão de demonstração do aplicativo.</p>
+      ),
+      buttons: { ok: "OK" },
+    });
+  }
 
   useEffect(() => {
-    //compass.push(QAView, {});
-    //return () => compass.pop();
+    showAlert({
+      title: "Seja bem-vindo(a) ao Rumos!",
+      content: <p>Para começarmos, nos diga como você se chama.</p>,
+      buttons: {
+        cancel: "Cancelar",
+        ok: "OK",
+      },
+    });
   }, []);
 
   const trilhas: Trilha[] = [
     {
       titulo: "Morando sozinho, e agora?",
       modulos: [
-        { titulo: "Descobrindo o IPVA", background: Trilha01 },
-        { titulo: "Tipos de financiamento", background: Trilha01 },
-        { titulo: "Tipos de financiamento", background: Trilha01 },
-        { titulo: "Tipos de financiamento", background: Trilha01 },
-        { titulo: "Tipos de financiamento", background: Trilha01 },
+        { id: 0, titulo: "Descobrindo o IPVA", background: Trilha01 },
+        { id: 1, titulo: "Tipos de financiamento", background: Trilha01 },
+        { id: 2, titulo: "Tipos de financiamento", background: Trilha01 },
+        { id: 3, titulo: "Tipos de financiamento", background: Trilha01 },
+        { id: 4, titulo: "Tipos de financiamento", background: Trilha01 },
       ],
     },
     {
       titulo: "Meu primeiro automóvel",
       modulos: [
-        { titulo: "Descobrindo o IPVA", background: Trilha01, disabled: true },
-        { titulo: "Tipos de financiamento", background: Trilha02, disabled: true },
-        { titulo: "Tipos de financiamento", background: Trilha02, disabled: true },
-        { titulo: "Tipos de financiamento", background: Trilha02, disabled: true },
-        { titulo: "Tipos de financiamento", background: Trilha02, disabled: true },
+        { id: 0, titulo: "Descobrindo o IPVA", background: Trilha01, disabled: true },
+        { id: 1, titulo: "Tipos de financiamento", background: Trilha02, disabled: true },
+        { id: 2, titulo: "Tipos de financiamento", background: Trilha02, disabled: true },
+        { id: 3, titulo: "Tipos de financiamento", background: Trilha02, disabled: true },
+        { id: 4, titulo: "Tipos de financiamento", background: Trilha02, disabled: true },
       ],
     },
   ];
@@ -62,8 +81,8 @@ export default function HomeView() {
           <ul className="flex h-60 w-full overflow-x-scroll py-2 before:mr-4 after:ml-4">
             {trilha.modulos.map((modulo) => (
               <motion.li
-                key={modulo.titulo}
-                whileTap={{ scale: 1.05 }}
+                key={modulo.id}
+                whileTap={modulo.disabled ? undefined : { scale: 1.05 }}
                 className={cn(
                   "mr-2 flex aspect-[3/4] h-full shrink-0 flex-col justify-end overflow-hidden rounded-2xl p-4 text-gray-100 shadow-md",
                   modulo.disabled && "opacity-20 shadow-none",
@@ -71,13 +90,14 @@ export default function HomeView() {
                 )}
                 style={{ "--card-bg": `url('${modulo.background}')` }}
                 onClick={() =>
-                  windowing.createWindow({
-                    component: QAView,
-                    props: {},
-                    title: "QA",
-                  })
-                }
-                inert={modulo.disabled}>
+                  modulo.disabled
+                    ? trilhaNotAvailable()
+                    : windowing.createWindow({
+                        component: QAView,
+                        props: {},
+                        title: "QA",
+                      })
+                }>
                 <h3 className="w-2/3 text-lg font-semibold">{modulo.titulo}</h3>
               </motion.li>
             ))}

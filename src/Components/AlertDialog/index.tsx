@@ -1,3 +1,4 @@
+import { motion, Variant } from "framer-motion";
 import { useCallback, useEffect, useRef, type PropsWithChildren } from "react";
 import { useWindowing } from "../../Lib/compass_navigator";
 import Deferred from "../../Lib/deferred";
@@ -11,10 +12,41 @@ interface AlertDialogProps<ActionKeys extends string> extends PropsWithChildren 
   onButton: (action: ActionKeys) => void;
 }
 
+const MotionFrame = motion.create(Frame);
+
+const variants = {
+  enter: {
+    scale: 0,
+    opacity: 0.7,
+  } satisfies Variant,
+  active: {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 30,
+      duration: 0.15,
+    },
+  } satisfies Variant,
+  exit: {
+    scale: 0,
+    transition: {
+      ease: "easeIn",
+      duration: 0.2,
+    },
+  } satisfies Variant,
+};
+
 function AlertDialog<ActionKeys extends string>(props: AlertDialogProps<ActionKeys>) {
   return (
     <div className="h-full w-full bg-white/20 backdrop-blur-sm">
-      <Frame className="absolute top-1/2 left-1/2 flex w-[calc(100%-theme('spacing.8'))] -translate-x-1/2 -translate-y-1/2 flex-col items-stretch gap-2 shadow-2xl">
+      <MotionFrame
+        initial="enter"
+        animate="active"
+        exit="exit"
+        variants={variants}
+        className="absolute top-1/2 left-1/2 flex w-[calc(100%-theme('spacing.8'))] -translate-x-1/2 -translate-y-1/2 flex-col items-stretch gap-2 shadow-2xl">
         <h1 className="border-b border-gray-200 pb-2 text-center text-xl">{props.title}</h1>
         <main className="max-h-[50lvh] shrink grow overflow-y-scroll">{props.children}</main>
         <footer className="flex gap-2">
@@ -28,7 +60,7 @@ function AlertDialog<ActionKeys extends string>(props: AlertDialogProps<ActionKe
             </Button>
           ))}
         </footer>
-      </Frame>
+      </MotionFrame>
     </div>
   );
 }
@@ -61,6 +93,7 @@ export default function useAlert() {
           deferred.resolve(action);
         },
       },
+      noAnimation: true,
       backButton: false,
     });
 

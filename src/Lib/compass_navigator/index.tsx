@@ -18,6 +18,7 @@ const makeWindowKey = sequence();
 export interface Window<P> {
   key: WindowKey;
   title: string;
+  noAnimation: boolean;
   backButton: boolean;
   component: (props: P) => ReactNode;
   props: P;
@@ -115,6 +116,7 @@ export function useWindowing() {
       component: (props: P) => ReactNode | null;
       props: P;
       title: string;
+      noAnimation?: boolean;
       backButton?: boolean;
     }) {
       const window = {
@@ -122,6 +124,7 @@ export function useWindowing() {
         title: options.title,
         component: options.component,
         props: options.props,
+        noAnimation: options.noAnimation ?? false,
         backButton: options.backButton ?? true,
       } satisfies Window<P>;
 
