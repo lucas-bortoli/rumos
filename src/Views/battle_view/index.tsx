@@ -67,14 +67,14 @@ export default function BattleView(props: BattleViewProps) {
         />
       </section>
       {Run(() => {
-        switch (battle.state) {
+        switch (battle.state.kind) {
           case "UserTurn":
             return (
               <CurvedCards
                 key="curved"
                 onCardClick={zoomOnCard}
                 className="absolute bottom-12"
-                cards={battle.opponent.terms.map((term) => ({ key: term.id, title: term.term }))}
+                cards={battle.state.choices.map((term) => ({ key: term.id, title: term.term }))}
               />
             );
         }
