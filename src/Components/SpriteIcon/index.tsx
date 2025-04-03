@@ -1,3 +1,4 @@
+import { CSSProperties } from "react";
 import { cn } from "../../Lib/class_names";
 import IconArchie128 from "./Archie128.png";
 import IconHeart24 from "./Heart24.png";
@@ -14,6 +15,7 @@ type IconName = keyof typeof Icons;
 interface SpriteIconProps {
   name: IconName;
   className?: string;
+  style?: CSSProperties;
 }
 
 export default function SpriteIcon(props: SpriteIconProps) {
@@ -28,6 +30,7 @@ export default function SpriteIcon(props: SpriteIconProps) {
         fontSize: `${icon[1]}px`,
         height: `${icon[1]}px`,
         imageRendering: "pixelated",
+        ...props.style,
       }}
     />
   );

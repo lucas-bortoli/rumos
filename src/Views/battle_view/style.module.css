@@ -1,0 +1,14 @@
+.container {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyAQMAAAAk8RryAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAGUExURTIyMkBAQJspR/AAAAAUSURBVBjTY/gPBgcYIMBhlB5YGgCnYhL7qWNBvwAAAABJRU5ErkJggg==);
+  background-repeat: repeat;
+  animation: moveGrid 5s linear infinite;
+}
+
+@keyframes moveGrid {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 100px 50px; /*adjust based on your grid size */
+  }
+}

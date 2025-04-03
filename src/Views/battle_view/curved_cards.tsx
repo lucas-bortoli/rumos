@@ -1,15 +1,21 @@
 import { motion } from "framer-motion";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Key, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { cn } from "../../Lib/class_names";
+
+interface Card {
+  key: Key;
+  title: string;
+}
 
 interface CurvedCardsProps {
   onCardClick: () => void;
+  className?: string;
+  cards: Card[];
 }
 
 export default function CurvedCards(props: CurvedCardsProps) {
   const containerRef = useRef<HTMLUListElement>(null);
   const [cardTranslations, setCardTranslations] = useState<number[]>([]);
-  const cards = [0, 1, 2, 3, 4];
 
   // Update translations based on horizontal position
   const updateTranslations = useCallback(() => {
@@ -76,19 +82,20 @@ export default function CurvedCards(props: CurvedCardsProps) {
     <ul
       ref={containerRef}
       className={cn(
-        "scrollbar-hide flex h-72 w-full overflow-x-scroll py-2 before:mr-24 after:ml-24",
-        "-mt-24 pt-24" // overflow + translate-y hack
+        "scrollbar-hide flex h-64 w-full overflow-x-scroll py-2 before:mr-24 after:ml-24",
+        "pt-16", // overflow + translate-y hack
+        props.className
       )}>
-      {cards.map((card, index) => (
+      {props.cards.map((card, index) => (
         <motion.li
-          key={card}
+          key={card.key}
           data-card-index={index}
           whileTap={{ scale: 1.05 }}
           animate={{ y: cardTranslations[index] || 0 }}
           transition={{ type: "spring", stiffness: 1500, damping: 30 }}
           className="mr-2 flex aspect-[3/4] h-full shrink-0 flex-col justify-end overflow-hidden rounded-lg bg-white p-4 text-gray-600 shadow-md"
           onClick={props.onCardClick}>
-          <h3 className="w-2/3 text-lg font-semibold">Card {card}</h3>
+          <h3 className="w-2/3 text-lg font-semibold">{card.title}</h3>
         </motion.li>
       ))}
     </ul>

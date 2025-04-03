@@ -5,7 +5,7 @@ type Direction = "up" | "down" | "left" | "right";
 
 interface UseSwipeOptions {
   target: RefObject<HTMLElement | null>;
-  onSwipeEnd: (direction: Direction) => void;
+  onSwipeEnd: (direction: Direction, threshold: number) => void;
   threshold?: number;
   velocity?: number;
 }
@@ -47,11 +47,13 @@ export function useSwipe({
       const velocityX = absX / timeDelta;
       const velocityY = absY / timeDelta;
 
-      if (Math.max(absX, absY) < threshold || Math.max(velocityX, velocityY) < velocity) return;
+      const distance = Math.max(absX, absY);
+
+      if (distance < threshold || Math.max(velocityX, velocityY) < velocity) return;
 
       const direction = absX > absY ? (deltaX > 0 ? "right" : "left") : deltaY > 0 ? "down" : "up";
 
-      onSwipeEndRef.current(direction);
+      onSwipeEndRef.current(direction, distance);
     };
 
     // Unified pointer handler

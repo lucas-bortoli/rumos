@@ -54,9 +54,10 @@ export default function ZoomedCard(props: ZoomedCardProps) {
 
   useSwipe({
     target: cardRef,
-    threshold: 120,
-    onSwipeEnd: (direction) => {
-      if (direction === "up") {
+    threshold: 60,
+    onSwipeEnd: (direction, distance) => {
+      console.log({ direction, distance });
+      if (direction === "up" && distance >= 180) {
         submit();
       } else if (direction === "down") {
         cancel();
