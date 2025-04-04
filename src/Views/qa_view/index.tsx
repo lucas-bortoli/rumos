@@ -108,12 +108,11 @@ export default function QAView() {
   const windowing = useWindowing();
 
   function onCardClick() {
-    const key = windowing.createWindow({
+    windowing.createWindow({
       component: BattleView,
       props: {},
       title: "Battle View",
     });
-    return () => windowing.removeSpecificWindow(key);
   }
 
   return (

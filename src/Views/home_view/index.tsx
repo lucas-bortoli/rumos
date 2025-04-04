@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
-import { useEffect } from "react";
 import useAlert from "../../Components/AlertDialog";
 import SvgIcon from "../../Components/SvgIcon";
 import { cn } from "../../Lib/class_names";
 import { useWindowing } from "../../Lib/compass_navigator";
+import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
+import MarketplaceView from "../marketplace_view";
 import QAView from "../qa_view";
 import style from "./style.module.css";
 import Trilha01 from "./trilha01.png";
@@ -33,17 +34,6 @@ export default function HomeView() {
     });
   }
 
-  useEffect(() => {
-    showAlert({
-      title: "Seja bem-vindo(a) ao Rumos!",
-      content: <p>Para começarmos, nos diga como você se chama.</p>,
-      buttons: {
-        cancel: "Cancelar",
-        ok: "OK",
-      },
-    });
-  }, []);
-
   const trilhas: Trilha[] = [
     {
       titulo: "Morando sozinho, e agora?",
@@ -66,6 +56,30 @@ export default function HomeView() {
       ],
     },
   ];
+
+  const currentWindowKey = useCurrentWindowKey();
+  function goTo(other: "marketplace" | "home") {
+    switch (other) {
+      case "home":
+        windowing.createWindow({
+          component: HomeView,
+          props: {},
+          title: "Minhas Trilhas",
+          noAnimation: true,
+        });
+        break;
+      case "marketplace":
+        windowing.createWindow({
+          component: MarketplaceView,
+          props: {},
+          title: "Marketplace",
+          noAnimation: true,
+        });
+        break;
+    }
+
+    windowing.removeSpecificWindow(currentWindowKey);
+  }
 
   return (
     <main className="relative h-full w-full overflow-x-hidden overflow-y-scroll bg-white pb-20">
@@ -106,9 +120,15 @@ export default function HomeView() {
       ))}
       <footer className="bg-grey-100 border-grey-200 fixed bottom-0 left-0 z-10 flex w-full items-center border-t px-16 py-4">
         <div className="text-grey-400 flex h-12 w-full items-center justify-between">
-          <SvgIcon icon="Explore" />
-          <SvgIcon icon="AccountCircle" className="text-lime-600" />
-          <SvgIcon icon="BarChart" />
+          <div onClick={() => goTo("marketplace")} className="h-full">
+            <SvgIcon icon="Explore" />
+          </div>
+          <div onClick={() => goTo("home")} className="h-full">
+            <SvgIcon icon="AccountCircle" className="text-lime-600" />
+          </div>
+          <div className="h-full">
+            <SvgIcon icon="BarChart" />
+          </div>
         </div>
       </footer>
     </main>
