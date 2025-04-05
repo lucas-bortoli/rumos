@@ -1,46 +1,15 @@
 import { motion } from "framer-motion";
-import useAlert from "../../Components/AlertDialog";
-import SvgIcon from "../../Components/SvgIcon";
+import NavigationBarBottom from "../../Components/NavigationBarBottom";
 import { cn } from "../../Lib/class_names";
-import { useWindowing } from "../../Lib/compass_navigator";
-import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
 import useSound from "../../Lib/sound";
-import HomeView from "../home_view";
 
 export default function MarketplaceView() {
-  const windowing = useWindowing();
-  const showAlert = useAlert();
-
   useSound({
     name: "MusShop",
     volume: 0.1,
     loop: true,
     autoPlay: true,
   });
-
-  const currentWindowKey = useCurrentWindowKey();
-  function goTo(other: "marketplace" | "home") {
-    switch (other) {
-      case "home":
-        windowing.createWindow({
-          component: HomeView,
-          props: {},
-          title: "Minhas Trilhas",
-          noAnimation: true,
-        });
-        break;
-      case "marketplace":
-        windowing.createWindow({
-          component: MarketplaceView,
-          props: {},
-          title: "Marketplace",
-          noAnimation: true,
-        });
-        break;
-    }
-
-    windowing.removeSpecificWindow(currentWindowKey);
-  }
 
   return (
     <main className="relative h-full w-full overflow-x-hidden overflow-y-scroll bg-white pb-20">
@@ -65,19 +34,7 @@ export default function MarketplaceView() {
           </ul>
         </section>
       ))}
-      <footer className="bg-grey-100 border-grey-200 fixed bottom-0 left-0 z-10 flex w-full items-center border-t px-16 py-4">
-        <div className="text-grey-400 flex h-12 w-full items-center justify-between">
-          <div onClick={() => goTo("marketplace")} className="h-full">
-            <SvgIcon icon="Explore" className="text-lime-600" />
-          </div>
-          <div onClick={() => goTo("home")} className="h-full">
-            <SvgIcon icon="AccountCircle" />
-          </div>
-          <div className="h-full">
-            <SvgIcon icon="BarChart" />
-          </div>
-        </div>
-      </footer>
+      <NavigationBarBottom currentScreen="Marketplace" />
     </main>
   );
 }
