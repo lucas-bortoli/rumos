@@ -11,4 +11,6 @@ services:
       - HTTP_PORT=3000
       - DATABASE_LOCATION=/data/telemetry.db
       - CLIENT_PUBLIC_API_KEY=rumos-v0
+      - TLS_CERT_PATH=/cert.pem
+      - TLS_KEY_PATH=/key.pem
     restart: unless-stopped

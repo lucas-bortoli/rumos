@@ -5,6 +5,8 @@ import { z } from "zod";
 import { env } from "./env";
 import Logger from "./logger";
 import * as cors from "./cors";
+import type { TLSOptions } from "bun";
+import fs from "node:fs";
 
 const logger = new Logger("Main");
 
@@ -30,8 +32,25 @@ const FrameSchema = z.object({
 
 logger.info(`Starting server listening on port ${env.HTTP_PORT}`);
 
+const tls: TLSOptions | undefined = (() => {
+  if (!env.TLS_CERT_PATH || !env.TLS_KEY_PATH) return undefined;
+
+  try {
+    const cert = fs.readFileSync(env.TLS_CERT_PATH!);
+    const key = fs.readFileSync(env.TLS_KEY_PATH!);
+
+    logger.info("Using TLS keys from", [env.TLS_CERT_PATH, env.TLS_KEY_PATH]);
+
+    return { cert, key };
+  } catch (error) {
+    logger.error("TLS setup failed:", error);
+    return undefined;
+  }
+})();
+
 const server = Bun.serve({
   port: env.HTTP_PORT,
+  tls,
   async fetch(request) {
     const url = new URL(request.url);
 
