@@ -8,10 +8,6 @@ export interface ButtonProps extends PropsWithChildren, ButtonHTMLAttributes<HTM
 }
 
 export default function Button(props: ButtonProps) {
-  if (!props.title) {
-    console.warn("Button doesn't have an appropriate tooltip.");
-  }
-
   return (
     <button
       {...props}

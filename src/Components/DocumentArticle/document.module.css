@@ -1,18 +1,25 @@
 .doc-view {
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 60px;
   line-height: 1.6;
+  touch-action: pan-y;
+  font-size: 1rem;
 }
 
 .doc-view h1 {
   margin-bottom: 20px;
   text-align: center;
+  font-size: 1.5em;
 }
 
 .doc-view h2 {
   margin-top: 20px;
   margin-bottom: 10px;
+  font-size: 1.4em;
+}
+
+.doc-view h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 1.2em;
 }
 
 .doc-view p {
@@ -22,10 +29,12 @@
 .doc-view ul {
   margin-left: 20px;
   padding-left: 20px;
+  list-style: square;
 }
 
 .doc-view li {
   margin-bottom: 10px;
+  list-style: decimal-leading-zero;
 }
 
 .doc-view strong {
