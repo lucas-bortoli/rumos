@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from "react";
+import { Key, useCallback, useEffect, useLayoutEffect, useMemo } from "react";
 import Frame from "../../Components/Frame";
 import SpriteIcon from "../../Components/SpriteIcon";
 import { cn } from "../../Lib/class_names";
@@ -12,6 +12,7 @@ import HealthBar from "./health_bar";
 import style from "./style.module.css";
 import useScrollingText from "./use_scrolling_text";
 import ZoomedCard from "./zoomed_card";
+import useStateEffect from "./use_state_effect";
 
 interface BattleViewProps {}
 
@@ -19,7 +20,7 @@ export default function BattleView(props: BattleViewProps) {
   const battle = useImperativeObject(() => new Battle());
   const windowing = useWindowing();
 
-  const soundBgm = useSound({
+  useSound({
     name: "MusSuspense",
     volume: 0.5,
     loop: true,
@@ -37,22 +38,54 @@ export default function BattleView(props: BattleViewProps) {
     console.log(battle.state);
   }, [battle.state]);
 
-  function zoomOnCard() {
-    windowing.createWindow({
-      title: "Zoomed Card",
-      component: ZoomedCard,
-      props: {
-        onSubmit: () => {
-          battle.onUserAction({ kind: "CardSubmit" });
+  function zoomOnCard(cardKey: Key) {
+    if (battle.state.kind !== "UserTurn") return;
+
+    const isHintCard = cardKey === "HintCard";
+
+    if (isHintCard) {
+      windowing.createWindow({
+        title: "Zoomed Card",
+        component: ZoomedCard,
+        props: {
+          cardContent: battle.state.question.tip,
+          isHintCard: true,
         },
-        onCancel: () => {},
-      },
-      backButton: false,
-      noAnimation: true,
-    });
+        backButton: false,
+        noAnimation: true,
+      });
+    } else {
+      const card = battle.state.choices.find((c) => c.content === cardKey);
+      if (!card) return;
+      windowing.createWindow({
+        title: "Zoomed Card",
+        component: ZoomedCard,
+        props: {
+          cardContent: card.content,
+          isHintCard: false,
+          onSubmit: () => {
+            battle.onUserAction({ kind: "CardSubmit", wasCorrect: card.isCorrect });
+          },
+          onCancel: () => {},
+        },
+        backButton: false,
+        noAnimation: true,
+      });
+    }
   }
 
-  const visibleDialog = useScrollingText(battle.dialog ?? "...", 18);
+  useStateEffect(
+    ([currentHp], [previousHp]) => {
+      if (currentHp < previousHp) {
+        console.log("player harmed");
+      } else {
+        console.log("player not harmed");
+      }
+    },
+    [battle.player.hp] as const
+  );
+
+  const visibleDialog = useScrollingText(battle.dialog ?? "...", 8);
 
   return (
     <div
@@ -80,7 +113,10 @@ export default function BattleView(props: BattleViewProps) {
                 key="curved"
                 onCardClick={zoomOnCard}
                 className="absolute bottom-12"
-                cards={battle.state.choices.map((term) => ({ key: term.id, title: term.term }))}
+                cards={battle.state.choices.map((choice) => ({
+                  key: choice.content,
+                  title: choice.content,
+                }))}
               />
             );
         }

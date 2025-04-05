@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import { Key, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { cn } from "../../Lib/class_names";
+import SvgIcon from "../../Components/SvgIcon";
+
+type HintCardKey = "HintCard" & { _tag?: "HintCardKey" };
 
 interface Card {
   key: Key;
@@ -8,7 +11,7 @@ interface Card {
 }
 
 interface CurvedCardsProps {
-  onCardClick: () => void;
+  onCardClick: (key: Key | HintCardKey) => void;
   className?: string;
   cards: Card[];
 }
@@ -82,7 +85,7 @@ export default function CurvedCards(props: CurvedCardsProps) {
     <ul
       ref={containerRef}
       className={cn(
-        "scrollbar-hide flex h-64 w-full overflow-x-scroll py-2 before:mr-24 after:ml-24",
+        "scrollbar-hide flex h-72 w-full overflow-x-scroll py-2 before:mr-24 after:ml-24",
         "pt-16", // overflow + translate-y hack
         props.className
       )}>
@@ -93,11 +96,19 @@ export default function CurvedCards(props: CurvedCardsProps) {
           whileTap={{ scale: 1.05 }}
           animate={{ y: cardTranslations[index] || 0 }}
           transition={{ type: "spring", stiffness: 1500, damping: 30 }}
-          className="mr-2 flex aspect-[3/4] h-full shrink-0 flex-col justify-end overflow-hidden rounded-lg bg-white p-4 text-gray-600 shadow-md"
-          onClick={props.onCardClick}>
-          <h3 className="w-2/3 text-lg font-semibold">{card.title}</h3>
+          className="relative mr-2 aspect-[3/4] h-full shrink-0 overflow-hidden rounded-lg bg-white p-4 text-gray-600 shadow-md"
+          onClick={props.onCardClick.bind(null, card.key)}>
+          <h3 className="text-md absolute bottom-4 left-4 w-2/3 font-semibold">{card.title}</h3>
         </motion.li>
       ))}
+      <motion.li
+        key="hint"
+        whileTap={{ scale: 1.05 }}
+        className="relative mr-2 aspect-[3/4] h-full shrink-0 overflow-hidden rounded-lg border-4 border-amber-700 bg-amber-100 p-4 text-amber-950 shadow-md"
+        onClick={props.onCardClick.bind(null, "HintCard" satisfies HintCardKey)}>
+        <SvgIcon icon="HotelClass" className="text-amber-700" />
+        <h3 className="text-md absolute bottom-4 left-4 w-2/3 font-semibold">Dica</h3>
+      </motion.li>
     </ul>
   );
 }

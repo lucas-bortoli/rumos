@@ -2,17 +2,19 @@ import { cn } from "../../Lib/class_names";
 import IconAccountCircle from "./AccountCircle.svg?react";
 import IconBarChart from "./BarChart.svg?react";
 import IconExplore from "./Explore.svg?react";
+import IconHotelClass from "./HotelClass.svg?react";
 
 const Icons = {
   Explore: IconExplore,
   AccountCircle: IconAccountCircle,
   BarChart: IconBarChart,
+  HotelClass: IconHotelClass,
 } as const;
 
-type IconName = keyof typeof Icons;
+export type SvgIconName = keyof typeof Icons;
 
 interface SvgIconProps {
-  icon: IconName;
+  icon: SvgIconName;
   className?: string;
 }
 
