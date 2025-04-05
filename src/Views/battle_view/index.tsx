@@ -19,6 +19,9 @@ interface BattleViewProps {}
 export default function BattleView(props: BattleViewProps) {
   const battle = useImperativeObject(() => new Battle());
   const windowing = useWindowing();
+  const playCard1Sound = useSound({ name: "SndCards" });
+  const playCard2Sound = useSound({ name: "SndCards2" });
+  const playDamageSound = useSound({ name: "SndDamage" });
 
   useSound({
     name: "MusSuspense",
@@ -44,12 +47,15 @@ export default function BattleView(props: BattleViewProps) {
     const isHintCard = cardKey === "HintCard";
 
     if (isHintCard) {
+      playCard1Sound();
       windowing.createWindow({
         title: "Zoomed Hint Card",
         component: ZoomedCard,
         props: {
           cardContent: currentState.question.tip,
           isHintCard: true,
+          onSubmit: playCard2Sound,
+          onCancel: playCard2Sound,
         },
         backButton: false,
         noAnimation: true,
@@ -57,6 +63,7 @@ export default function BattleView(props: BattleViewProps) {
     } else {
       const card = currentState.choices.find((c) => c.content === cardKey);
       if (!card) return;
+      playCard1Sound();
       windowing.createWindow({
         title: "Zoomed Card",
         component: ZoomedCard,
@@ -64,9 +71,10 @@ export default function BattleView(props: BattleViewProps) {
           cardContent: card.content,
           isHintCard: false,
           onSubmit: () => {
+            playCard2Sound();
             battle.sendUserAction({ kind: "CardSubmit", wasCorrect: card.isCorrect });
           },
-          onCancel: () => {},
+          onCancel: playCard2Sound,
         },
         backButton: false,
         noAnimation: true,
@@ -78,6 +86,7 @@ export default function BattleView(props: BattleViewProps) {
     ([currentPlayerHp, currentBossHp], [previousPlayerHp, previousBossHp]) => {
       if (currentPlayerHp < previousPlayerHp) {
         console.log("player harmed");
+        playDamageSound();
 
         // shake screen HERE
       } else {
@@ -86,6 +95,7 @@ export default function BattleView(props: BattleViewProps) {
 
       if (currentBossHp < previousBossHp) {
         console.log("boss harmed");
+        playDamageSound();
       } else {
         console.log("boss not harmed");
       }

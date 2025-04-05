@@ -12,6 +12,8 @@ import SwipeLeftHint from "./Components/SwipeLeftHint";
 import TapHint from "./Components/TapHint";
 import Card, { CardMode } from "./Components/Card";
 import useCardFeed from "./use_card_feed";
+import useSound from "../../Lib/sound";
+import useUpdateEffect from "../../Lib/use_update_effect";
 
 interface CardStudyViewProps {
   trail: KnowledgeTrail;
@@ -59,6 +61,15 @@ export default function CardStudyView(props: CardStudyViewProps) {
   useEffect(() => {
     setCardMode("Front");
   }, [card]);
+
+  const playCard1Sound = useSound({ name: "SndCards" });
+  const playCard2Sound = useSound({ name: "SndCards2" });
+  useUpdateEffect(() => {
+    playCard1Sound();
+  }, [card]);
+  useUpdateEffect(() => {
+    playCard2Sound();
+  }, [cardMode]);
 
   return (
     <main className="bg-grey-400 relative h-full w-full overflow-x-hidden overflow-y-scroll">

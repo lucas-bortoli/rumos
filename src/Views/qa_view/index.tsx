@@ -1,15 +1,12 @@
-import { AnimatePresence, motion, Variant } from "framer-motion";
-import Frame from "../../Components/Frame";
-import { cn } from "../../Lib/class_names";
-import { useWindowing } from "../../Lib/compass_navigator";
+import { motion, Variant } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import DocumentArticle from "../../Components/DocumentArticle";
-import BattleView from "../battle_view";
+import Frame from "../../Components/Frame";
 import { DOCUMENT_CONTRACT_HTML } from "../../Game/Data/data";
-import Button from "../../Components/Button";
-import { useEffect, useMemo, useRef, useState } from "react";
-import qaStyle from "./qa.module.css";
+import { cn } from "../../Lib/class_names";
 import { addListener, removeListener } from "../../Lib/event_manager";
 import findElementInParents from "../../Lib/find_element_in_parents";
+import qaStyle from "./qa.module.css";
 
 const MotionFrame = motion.create(Frame);
 
@@ -38,18 +35,8 @@ const variants = {
 };
 
 export default function QAView() {
-  const windowing = useWindowing();
-
   const [choices, setChoices] = useState<string[]>([]);
   const [clickedWhiteout, setClickedWhiteout] = useState<HTMLElement | null>(null);
-
-  function gotobattle() {
-    windowing.createWindow({
-      component: BattleView,
-      props: {},
-      title: "Battle View",
-    });
-  }
 
   const articleRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -104,7 +91,6 @@ export default function QAView() {
     <main className="flex h-full w-full flex-col overflow-hidden bg-white">
       <nav className="flex items-center gap-2 border-b border-gray-200 bg-white p-4">
         <h1 className="text-xl">Meu Contrato de Locação</h1>
-        <Button onClick={gotobattle}>Gotobattle</Button>
       </nav>
       <div className="relative shrink grow overflow-auto">
         <DocumentArticle className={cn("bg-grey-100 p-8 pb-96")} ref={articleRef} />
