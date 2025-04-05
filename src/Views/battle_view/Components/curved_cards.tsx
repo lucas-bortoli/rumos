@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Key, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { cn } from "../../Lib/class_names";
-import SvgIcon from "../../Components/SvgIcon";
+import { cn } from "../../../Lib/class_names";
+import SvgIcon from "../../../Components/SvgIcon";
 
 type HintCardKey = "HintCard" & { _tag?: "HintCardKey" };
 

@@ -1,4 +1,4 @@
-import SpriteIcon from "../../Components/SpriteIcon";
+import SpriteIcon from "../../../Components/SpriteIcon";
 
 export default function HealthBar(props: { hp: number; hpMax: number }) {
   const hearts: boolean[] = [];

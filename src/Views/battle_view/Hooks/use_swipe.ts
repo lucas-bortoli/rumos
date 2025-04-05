@@ -1,5 +1,5 @@
 import { RefObject, useEffect } from "react";
-import useCurrentRef from "../../Lib/use_current_ref";
+import useCurrentRef from "../../../Lib/use_current_ref";
 
 type Direction = "up" | "down" | "left" | "right";
 

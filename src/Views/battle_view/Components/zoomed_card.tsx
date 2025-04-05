@@ -1,11 +1,11 @@
 import { motion, Variant } from "framer-motion";
-import { useRef } from "react";
-import { useWindowing } from "../../Lib/compass_navigator";
-import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
-import useCurrentWindowBackButton from "../../Lib/compass_navigator/window_container/use_current_window_back_button";
-import { useSwipe } from "./use_swipe";
-import { cn } from "../../Lib/class_names";
-import SvgIcon from "../../Components/SvgIcon";
+import { useEffect, useRef, useState } from "react";
+import { useWindowing } from "../../../Lib/compass_navigator";
+import useCurrentWindowKey from "../../../Lib/compass_navigator/window_container/current_window_key_context";
+import useCurrentWindowBackButton from "../../../Lib/compass_navigator/window_container/use_current_window_back_button";
+import { useSwipe } from "../Hooks/use_swipe";
+import { cn } from "../../../Lib/class_names";
+import SvgIcon from "../../../Components/SvgIcon";
 
 const variants = {
   enter: {
@@ -39,6 +39,8 @@ interface ZoomedCardProps {
   onCancel?: () => void;
 }
 
+const MotionSvgIcon = motion.create(SvgIcon);
+
 export default function ZoomedCard(props: ZoomedCardProps) {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const currentWindowKey = useCurrentWindowKey();
@@ -69,6 +71,14 @@ export default function ZoomedCard(props: ZoomedCardProps) {
     },
   });
 
+  const [swipeHintVisible, setSwipeHintVisible] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSwipeHintVisible((v) => !v);
+    }, 8000);
+    return () => clearTimeout(timer);
+  }, [swipeHintVisible]);
+
   return (
     <div className="absolute top-0 left-0 h-full w-full bg-black/50">
       <motion.div
@@ -92,6 +102,22 @@ export default function ZoomedCard(props: ZoomedCardProps) {
           {props.cardContent}
         </h3>
       </motion.div>
+      {swipeHintVisible && (
+        <MotionSvgIcon
+          icon="SwipeVertical"
+          className="absolute top-1/2 right-1/12 z-10 !h-16"
+          animate={{
+            y: [0, -120, 0, 120, 0],
+            rotate: [0, 15, 0, -15, 0],
+          }}
+          transition={{
+            duration: 3,
+            ease: "anticipate",
+            repeat: Infinity,
+          }}
+          exit={{ opacity: 0, transition: { duration: 0.2 } }}
+        />
+      )}
     </div>
   );
 }

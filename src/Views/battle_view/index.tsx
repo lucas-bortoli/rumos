@@ -1,4 +1,4 @@
-import { Key, useCallback, useEffect, useLayoutEffect, useMemo } from "react";
+import { Key, useEffect, useLayoutEffect } from "react";
 import Frame from "../../Components/Frame";
 import SpriteIcon from "../../Components/SpriteIcon";
 import { cn } from "../../Lib/class_names";
@@ -6,13 +6,13 @@ import { useWindowing } from "../../Lib/compass_navigator";
 import useImperativeObject from "../../Lib/imperative_object";
 import Run from "../../Lib/run";
 import useSound from "../../Lib/sound";
-import Battle from "./battle";
-import CurvedCards from "./curved_cards";
-import HealthBar from "./health_bar";
+import CurvedCards from "./Components/curved_cards";
+import HealthBar from "./Components/health_bar";
+import { Battle, UserTurn } from "./Logic";
 import style from "./style.module.css";
-import useScrollingText from "./use_scrolling_text";
-import ZoomedCard from "./zoomed_card";
-import useStateEffect from "./use_state_effect";
+import useScrollingText from "./Hooks/use_scrolling_text";
+import useStateEffect from "./Hooks/use_state_effect";
+import ZoomedCard from "./Components/zoomed_card";
 
 interface BattleViewProps {}
 
@@ -35,27 +35,27 @@ export default function BattleView(props: BattleViewProps) {
   }, []);
 
   useEffect(() => {
-    console.log(battle.state);
+    console.log(battle.state?.kind);
   }, [battle.state]);
 
   function zoomOnCard(cardKey: Key) {
-    if (battle.state.kind !== "UserTurn") return;
-
+    if (battle.state?.kind !== "UserTurn") return;
+    const currentState = battle.state as UserTurn;
     const isHintCard = cardKey === "HintCard";
 
     if (isHintCard) {
       windowing.createWindow({
-        title: "Zoomed Card",
+        title: "Zoomed Hint Card",
         component: ZoomedCard,
         props: {
-          cardContent: battle.state.question.tip,
+          cardContent: currentState.question.tip,
           isHintCard: true,
         },
         backButton: false,
         noAnimation: true,
       });
     } else {
-      const card = battle.state.choices.find((c) => c.content === cardKey);
+      const card = currentState.choices.find((c) => c.content === cardKey);
       if (!card) return;
       windowing.createWindow({
         title: "Zoomed Card",
@@ -64,7 +64,7 @@ export default function BattleView(props: BattleViewProps) {
           cardContent: card.content,
           isHintCard: false,
           onSubmit: () => {
-            battle.onUserAction({ kind: "CardSubmit", wasCorrect: card.isCorrect });
+            battle.sendUserAction({ kind: "CardSubmit", wasCorrect: card.isCorrect });
           },
           onCancel: () => {},
         },
@@ -75,17 +75,27 @@ export default function BattleView(props: BattleViewProps) {
   }
 
   useStateEffect(
-    ([currentHp], [previousHp]) => {
-      if (currentHp < previousHp) {
+    ([currentPlayerHp, currentBossHp], [previousPlayerHp, previousBossHp]) => {
+      if (currentPlayerHp < previousPlayerHp) {
         console.log("player harmed");
+
+        // shake screen HERE
       } else {
         console.log("player not harmed");
       }
+
+      if (currentBossHp < previousBossHp) {
+        console.log("boss harmed");
+      } else {
+        console.log("boss not harmed");
+      }
     },
-    [battle.player.hp] as const
+    [battle.playerHp, battle.opponentHp] as const
   );
 
-  const visibleDialog = useScrollingText(battle.dialog ?? "...", 8);
+  useEffect(() => {}, [battle.state]);
+
+  const visibleDialog = useScrollingText(battle.state?.textBoxContent ?? "...", 8);
 
   return (
     <div
@@ -95,8 +105,8 @@ export default function BattleView(props: BattleViewProps) {
       )}>
       <Frame className="mx-4 mt-4 h-36">{visibleDialog}</Frame>
       <footer className="mt-2 flex flex-row-reverse justify-between px-4">
-        <span className="font-bold text-gray-100">{battle.opponent.name}</span>
-        <HealthBar hp={battle.opponent.hp} hpMax={battle.opponent.hpMax} />
+        <span className="font-bold text-gray-100">{battle.opponentName}</span>
+        <HealthBar hp={battle.opponentHp} hpMax={battle.opponentHpMax} />
       </footer>
       <section className="absolute top-0 left-0 inline-block h-full w-full">
         <SpriteIcon
@@ -106,24 +116,24 @@ export default function BattleView(props: BattleViewProps) {
         />
       </section>
       {Run(() => {
-        switch (battle.state.kind) {
-          case "UserTurn":
-            return (
-              <CurvedCards
-                key="curved"
-                onCardClick={zoomOnCard}
-                className="absolute bottom-12"
-                cards={battle.state.choices.map((choice) => ({
-                  key: choice.content,
-                  title: choice.content,
-                }))}
-              />
-            );
-        }
+        const state = battle.state;
+
+        if (state instanceof UserTurn)
+          return (
+            <CurvedCards
+              key="curved"
+              onCardClick={zoomOnCard}
+              className="absolute bottom-12"
+              cards={state.choices.map((choice) => ({
+                key: choice.content,
+                title: choice.content,
+              }))}
+            />
+          );
       })}
       <footer className="absolute bottom-4 flex w-full justify-between px-4">
-        <span className="font-bold text-gray-100">{battle.player.name}</span>
-        <HealthBar hp={battle.player.hp} hpMax={battle.player.hpMax} />
+        <span className="font-bold text-gray-100">{battle.playerName}</span>
+        <HealthBar hp={battle.playerHp} hpMax={battle.playerHpMax} />
       </footer>
     </div>
   );
