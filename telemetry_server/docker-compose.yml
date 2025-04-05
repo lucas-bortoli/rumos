@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    ports:
+      - "9543:3000"
+    volumes:
+      - ./:/usr/src/app
+      - ./data:/data # Maps host ./data to container /data
+    environment:
+      - NODE_ENV=production
+      - HTTP_PORT=3000
+      - DATABASE_LOCATION=/data/telemetry.db
+      - CLIENT_PUBLIC_API_KEY=rumos-v0
+    restart: unless-stopped

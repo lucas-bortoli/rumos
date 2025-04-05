@@ -5,14 +5,17 @@ import "./index.css";
 import { BackButtonProvider } from "./Lib/back_button";
 import { WindowManagerProvider, WindowsOutlet } from "./Lib/compass_navigator";
 import { MiniGBusProvider } from "./Lib/gbus_mini";
+import { TelemetryProvider } from "./Lib/telemetry";
 
 createRoot(document.getElementById("root")!).render(
   <MiniGBusProvider>
     <BackButtonProvider>
       <GameStateProvider>
         <WindowManagerProvider>
-          <WindowsOutlet />
-          <App />
+          <TelemetryProvider>
+            <WindowsOutlet />
+            <App />
+          </TelemetryProvider>
         </WindowManagerProvider>
       </GameStateProvider>
     </BackButtonProvider>

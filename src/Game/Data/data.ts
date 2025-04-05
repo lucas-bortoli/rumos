@@ -4,6 +4,9 @@ import img2 from "./KnowledgeTrailImages/Papelada.jpeg";
 import img3 from "./KnowledgeTrailImages/Papelada2.jpeg";
 import img4 from "./KnowledgeTrailImages/Tipos de Financiamento.jpeg";
 
+export const TELEMETRY_ENDPOINT = "http://localhost:9543/telemetry";
+export const TELEMETRY_CLIENT_KEY = "rumos-v0";
+
 export type KnowledgeTrailCategoryId = string & { _tag?: "KnowledgeTrailCategoryId" };
 
 export interface KnowledgeTrailCategory {
