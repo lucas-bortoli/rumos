@@ -4,8 +4,8 @@ import NavigationBarBottom from "../../Components/NavigationBarBottom";
 import { KNOWLEDGE_TRAIL_CATEGORIES, KNOWLEDGE_TRAILS } from "../../Game/Data/data";
 import { cn } from "../../Lib/class_names";
 import { useWindowing } from "../../Lib/compass_navigator";
-import QAView from "../qa_view";
 import style from "./style.module.css";
+import TrailMenuView from "../trail_menu_view";
 
 export default function HomeView() {
   const windowing = useWindowing();
@@ -27,7 +27,7 @@ export default function HomeView() {
         <h1 className="text-xl">Minhas Trilhas</h1>
       </nav>
       <section className="px-4">
-        Aqui ficam as trilhas do conhecimento disponíveis. Você pode selecionar uma para iniciar!
+        Aqui ficam as trilhas de conhecimento disponíveis. Você pode selecionar uma para iniciar!
       </section>
       {KNOWLEDGE_TRAIL_CATEGORIES.map((category) => (
         <section className="flex flex-col pt-2" key={category.id}>
@@ -46,9 +46,9 @@ export default function HomeView() {
                 onClick={() =>
                   trail.isEnabled
                     ? windowing.createWindow({
-                        component: QAView,
-                        props: {},
-                        title: "QA",
+                        component: TrailMenuView,
+                        props: { trail },
+                        title: "Trail Menu",
                       })
                     : trilhaNotAvailable()
                 }>

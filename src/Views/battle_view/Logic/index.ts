@@ -1,7 +1,12 @@
-import { BOSS_QUESTIONS, BossQuestion } from "../../../Game/Data/data";
+import {
+  BOSS_CORRECT_ANSWER_DIALOGUES,
+  BOSS_QUESTIONS,
+  BOSS_WRONG_ANSWER_DIALOGUES,
+  BossQuestion,
+} from "../../../Game/Data/data";
 import { addListener, removeListener } from "../../../Lib/event_manager";
 import { ImperativeObject, notifyUpdate } from "../../../Lib/imperative_object";
-import { shuffleArray } from "../../../Lib/random";
+import { pickRandomUniqueChoices, shuffleArray } from "../../../Lib/random";
 import generateUUID from "../../../Lib/uuid";
 
 export type UserAction = { kind: "ClickAnywhere" } | { kind: "CardSubmit"; wasCorrect: boolean };
@@ -32,8 +37,8 @@ export class Battle implements ImperativeObject {
   playerHp: number = 3;
   playerHpMax: number = 3;
   opponentName: string = "Archie2";
-  opponentHp: number = 8;
-  opponentHpMax: number = 8;
+  opponentHp: number = 3;
+  opponentHpMax: number = 3;
 
   private onWindowClickEventHandler: number | null = null;
 
@@ -143,9 +148,27 @@ export class UserTurn implements BattleState {
       if (action.wasCorrect) {
         this.battle.opponentHp--;
         if (this.battle.opponentHp < 0) this.battle.opponentHp = 0;
+
+        const lines = pickRandomUniqueChoices(BOSS_CORRECT_ANSWER_DIALOGUES, 1)[0];
+        if (this.battle.opponentHp >= 1) {
+          // acertou, mas o boss continua vivo
+          this.battle.switchState(new Dialog(this.battle, lines, new UserTurn(this.battle)));
+        } else {
+          // acertou e matou o boss
+          this.battle.switchState(new Dialog(this.battle, lines, new Victory(this.battle)));
+        }
       } else {
         this.battle.playerHp--;
         if (this.battle.playerHp < 0) this.battle.playerHp = 0;
+
+        const lines = pickRandomUniqueChoices(BOSS_WRONG_ANSWER_DIALOGUES, 1)[0];
+        if (this.battle.playerHp >= 1) {
+          // errou, mas o player continua vivo
+          this.battle.switchState(new Dialog(this.battle, lines, new UserTurn(this.battle)));
+        } else {
+          // errou e morreu
+          this.battle.switchState(new Dialog(this.battle, lines, new GameOver(this.battle)));
+        }
       }
 
       return true;

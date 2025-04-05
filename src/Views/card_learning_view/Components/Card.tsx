@@ -23,7 +23,7 @@ export default function Card(props: CardProps) {
     threshold: 60,
     onSwipeEnd: (direction, distance) => {
       console.log({ direction, distance });
-      if (direction === "left" && distance >= 180) {
+      if (direction === "left") {
         props.nextCard?.();
       }
     },

@@ -104,9 +104,9 @@ export default function CurvedCards(props: CurvedCardsProps) {
       <motion.li
         key="hint"
         whileTap={{ scale: 1.05 }}
-        className="relative mr-2 aspect-[3/4] h-full shrink-0 overflow-hidden rounded-lg border-4 border-amber-700 bg-amber-100 p-4 text-amber-950 shadow-md"
+        className="relative mr-2 aspect-[3/4] h-full shrink-0 overflow-hidden rounded-lg border-4 border-amber-300 bg-amber-100 p-4 text-amber-950 shadow-md"
         onClick={props.onCardClick.bind(null, "HintCard" satisfies HintCardKey)}>
-        <SvgIcon icon="HotelClass" className="text-amber-700" />
+        <SvgIcon icon="HotelClass" className="text-amber-300" />
         <h3 className="text-md absolute bottom-4 left-4 w-2/3 font-semibold">Dica</h3>
       </motion.li>
     </ul>

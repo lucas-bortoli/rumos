@@ -8,7 +8,7 @@ import Run from "../../Lib/run";
 import useSound from "../../Lib/sound";
 import CurvedCards from "./Components/curved_cards";
 import HealthBar from "./Components/health_bar";
-import { Battle, UserTurn } from "./Logic";
+import { Battle, GameOver, UserTurn, Victory } from "./Logic";
 import style from "./style.module.css";
 import useScrollingText from "./Hooks/use_scrolling_text";
 import useStateEffect from "./Hooks/use_state_effect";
@@ -102,7 +102,19 @@ export default function BattleView(props: BattleViewProps) {
       className={cn(
         "bg-grey-800 relative flex h-full w-full flex-col overflow-hidden",
         style.container
-      )}>
+      )}
+      style={{
+        animationPlayState: Run(() => {
+          if (
+            battle.state === null ||
+            battle.state instanceof Victory ||
+            battle.state instanceof GameOver
+          ) {
+            return "paused";
+          }
+          return "running";
+        }),
+      }}>
       <Frame className="mx-4 mt-4 h-36">{visibleDialog}</Frame>
       <footer className="mt-2 flex flex-row-reverse justify-between px-4">
         <span className="font-bold text-gray-100">{battle.opponentName}</span>
