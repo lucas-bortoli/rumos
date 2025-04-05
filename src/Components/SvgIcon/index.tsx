@@ -5,6 +5,8 @@ import IconBarChart from "./BarChart.svg?react";
 import IconExplore from "./Explore.svg?react";
 import IconHotelClass from "./HotelClass.svg?react";
 import IconSwipeVertical from "./SwipeVertical.svg?react";
+import IconChevronRight from "./ChevronRight.svg?react";
+import IconTouch from "./Touch.svg?react";
 
 const Icons = {
   Explore: IconExplore,
@@ -12,6 +14,8 @@ const Icons = {
   BarChart: IconBarChart,
   HotelClass: IconHotelClass,
   SwipeVertical: IconSwipeVertical,
+  ChevronRight: IconChevronRight,
+  Touch: IconTouch,
 } as const;
 
 export type SvgIconName = keyof typeof Icons;

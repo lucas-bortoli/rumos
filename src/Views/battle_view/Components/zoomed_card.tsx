@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import { useWindowing } from "../../../Lib/compass_navigator";
 import useCurrentWindowKey from "../../../Lib/compass_navigator/window_container/current_window_key_context";
 import useCurrentWindowBackButton from "../../../Lib/compass_navigator/window_container/use_current_window_back_button";
-import { useSwipe } from "../Hooks/use_swipe";
 import { cn } from "../../../Lib/class_names";
 import SvgIcon from "../../../Components/SvgIcon";
+import { useSwipe } from "../../../Lib/use_swipe";
 
 const variants = {
   enter: {

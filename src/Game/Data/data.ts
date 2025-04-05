@@ -92,6 +92,171 @@ export const KNOWLEDGE_TRAILS: KnowledgeTrail[] = [
   },
 ];
 
+export type StudyCardId = string & { _tag?: "KnowledgeTrailId" };
+
+export interface StudyCard {
+  id: StudyCardId;
+  front: string;
+  back: string;
+  back_example: string;
+}
+
+export interface StudyCard {
+  id: StudyCardId;
+  front: string;
+  back: string;
+  back_example: string;
+}
+
+export const STUDY_CARDS: StudyCard[] = [
+  {
+    id: "535dbf21-dc7d-4b04-a898-e71d9a96bd68",
+    front: "Locador",
+    back: "Pessoa que é dona do imóvel e está alugando para outra pessoa.",
+    back_example: "João é dono de uma loja e decide alugá-la. Ele é o locador.",
+  },
+  {
+    id: "853caa0a-592e-4f61-a24f-999c65b26caf",
+    front: "Locatária",
+    back: "Pessoa ou empresa que está alugando o imóvel para usar.",
+    back_example: "Maria aluga a loja para abrir seu salão. Ela é a locatária.",
+  },
+  {
+    id: "8b0ab8cb-3d83-41e1-b7ad-e09821aaabce",
+    front: "Vistoria",
+    back: "Inspeção feita no imóvel antes e depois do aluguel.",
+    back_example: "Verificar se a casa está em bom estado antes de entrar.",
+  },
+  {
+    id: "9038906f-6d3d-4a6b-8e50-89c8621c7dd4",
+    front: "Benfeitorias",
+    back: "Melhorias feitas no imóvel.",
+    back_example: "Consertar o telhado ou pintar as paredes.",
+  },
+  {
+    id: "2d17ca55-eb97-4f38-8cc4-a10181a3754c",
+    front: "Voluptuárias",
+    back: "Melhorias de luxo ou beleza.",
+    back_example: "Colocar uma banheira ou fonte decorativa.",
+  },
+  {
+    id: "433916dd-322a-4716-98bd-819a0b59e0e2",
+    front: "Úteis",
+    back: "Melhorias que tornam o imóvel mais funcional.",
+    back_example: "Instalar grades de segurança ou trocar uma porta.",
+  },
+  {
+    id: "7724d427-5330-4c35-aeb8-5fcc9858a55f",
+    front: "Rescisão",
+    back: "Encerrar o contrato antes do prazo.",
+    back_example: "Você quer sair do imóvel antes dos 3 anos combinados.",
+  },
+  {
+    id: "2bf1d772-6fd1-4dbd-a821-abef1a7cc200",
+    front: "Indenização",
+    back: "Valor pago para compensar prejuízo.",
+    back_example: "Quebrou o portão da casa? Você paga indenização.",
+  },
+  {
+    id: "810570ab-1a1a-48b9-9bf9-a1a58a961dd1",
+    front: "Multa compensatória",
+    back: "Multa por sair do contrato antes do combinado.",
+    back_example: "Desistiu do aluguel antes do tempo? Paga a multa.",
+  },
+  {
+    id: "69ea6d43-badc-4cdc-9d29-4642d0baf797",
+    front: "Encargos",
+    back: "Despesas extras além do aluguel.",
+    back_example: "Luz, água, IPTU, condomínio.",
+  },
+  {
+    id: "898d2bcb-f975-46a5-9107-26d442537ea5",
+    front: "Reajuste",
+    back: "Aumento do valor do aluguel com o tempo.",
+    back_example: "O aluguel sobe a cada 12 meses, conforme a inflação.",
+  },
+  {
+    id: "11518aaf-96c6-4612-b333-42f6e65b7395",
+    front: "Garantias locatícias",
+    back: "Formas de garantir o pagamento do aluguel.",
+    back_example: "Caução, fiador ou seguro fiança.",
+  },
+  {
+    id: "ea2f36c1-be72-47be-8f37-5b332f287a4f",
+    front: "Caução",
+    back: "Dinheiro deixado como garantia no início.",
+    back_example: "Paga 3 meses adiantado e recebe de volta no fim.",
+  },
+  {
+    id: "5ae84315-e82f-4f05-b1a6-459e71528ae9",
+    front: "Fiador",
+    back: "Pessoa que se responsabiliza se o inquilino não pagar.",
+    back_example: "Seu tio vira fiador e paga se você não puder.",
+  },
+  {
+    id: "ae0fa981-71dd-4e9c-91fb-198b5ee41ff9",
+    front: "Seguro fiança",
+    back: "Seguro que cobre o aluguel se você não pagar.",
+    back_example: "Um plano que paga o aluguel para o dono caso falte.",
+  },
+  {
+    id: "6215cf0e-cfe1-4d5a-a745-044d02f4f859",
+    front: "Novação",
+    back: "Trocar uma dívida ou obrigação por outra.",
+    back_example: "Devia um mês e combinou pagar parcelado.",
+  },
+  {
+    id: "18420b5f-10c1-409b-8a47-2777d203637f",
+    front: "Direito de preferência",
+    back: "Você tem prioridade se o dono quiser vender.",
+    back_example: "O dono quer vender, ele tem que oferecer pra você primeiro.",
+  },
+  {
+    id: "b6954e2d-abf8-49d6-ada9-7f22c8d5c71a",
+    front: "Foro",
+    back: "Cidade onde qualquer processo será resolvido.",
+    back_example: "Se der problema, o processo acontece naquela cidade combinada.",
+  },
+  {
+    id: "9a8a7955-3cb0-4386-9725-0d57d1a2f9d1",
+    front: "Solidariamente",
+    back: "Todos os responsáveis podem ser cobrados sozinhos.",
+    back_example: "Dois fiadores - qualquer um pode pagar tudo.",
+  },
+  {
+    id: "3ee2ec60-18ee-435b-a3a9-9115f112054c",
+    front: "Alienação",
+    back: "Venda do imóvel.",
+    back_example: "O dono vende a casa que você está alugando.",
+  },
+  {
+    id: "d79ccd7a-d9e9-49b3-bf83-6480bffa9a9d",
+    front: "Apólice",
+    back: "Documento que prova que você tem seguro.",
+    back_example: "Igual ao papel do seguro do carro, mas do aluguel.",
+  },
+  {
+    id: "3aa01df8-8b53-4a84-9e72-5116a4e79c8b",
+    front: "IPCA",
+    back: "Índice que mede a inflação e pode ajustar o aluguel.",
+    back_example: "Se tudo fica mais caro, o IPCA sobe e o aluguel também.",
+  },
+];
+
+export const BOSS_NAME = "Archie";
+
+export const BOSS_CORRECT_ANSWER_DIALOGUES: string[][] = [
+  ["Tá bom. Você sabe o básico... mas isso não vai te salvar do Vincent."],
+  ["Até que enfim alguém que leu os contratos. Não comemore ainda - isso foi o fácil."],
+  ["Sal teria gostado de você. Uma pena que ele não está mais aqui pra ver."],
+];
+
+export const BOSS_WRONG_ANSWER_DIALOGUES: string[][] = [
+  ["Patético. Nem meu sobrinho de 12 anos erra essas."],
+  ["Volte quando aprender a ler. Até lá, fique longe dos negócios da família."],
+  ["Eu avisei. Agora vai embora antes que eu mude de ideia."],
+];
+
 export type BossQuestionId = string & { _tag?: "BossQuestionId" };
 
 export interface BossQuestion {
