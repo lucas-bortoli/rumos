@@ -1,4 +1,4 @@
-import { GameData } from "./data";
+import { GameState } from "./state";
 
 const STORAGE_KEY = "gameData";
 
@@ -10,7 +10,7 @@ function debounceFunction<T extends (...args: any[]) => void>(func: T, wait: num
   } as T;
 }
 
-export function loadFromLocalStorage(initialIfNotFound: GameData) {
+export function loadFromLocalStorage(initialIfNotFound: GameState) {
   try {
     const storedData = localStorage.getItem(STORAGE_KEY);
     return storedData ? JSON.parse(storedData) : initialIfNotFound;
@@ -20,7 +20,7 @@ export function loadFromLocalStorage(initialIfNotFound: GameData) {
   }
 }
 
-export function saveToLocalStorageImmediate(state: GameData) {
+export function saveToLocalStorageImmediate(state: GameState) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch (error) {

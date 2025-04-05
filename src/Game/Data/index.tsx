@@ -6,19 +6,19 @@ import {
   useEffect,
   useReducer,
 } from "react";
-import { GameData, initialGameData } from "./data";
+import { GameState, initialGameState } from "./state";
 import { loadFromLocalStorage, saveToLocalStorage } from "./storage";
 
 type Action = {};
 
-function reducer(previous: GameData, action: Action): GameData {
+function reducer(previous: GameState, action: Action): GameState {
   return previous;
 }
 
-const context = createContext<{ data: GameData; dispatch: Dispatch<Action> } | null>(null);
+const context = createContext<{ data: GameState; dispatch: Dispatch<Action> } | null>(null);
 
-export function GameDataProvider(props: PropsWithChildren) {
-  const [data, dispatch] = useReducer(reducer, initialGameData, loadFromLocalStorage);
+export function GameStateProvider(props: PropsWithChildren) {
+  const [data, dispatch] = useReducer(reducer, initialGameState, loadFromLocalStorage);
 
   useEffect(() => {
     saveToLocalStorage(data); // this is debounced so it's fine to call it immediately
@@ -27,8 +27,8 @@ export function GameDataProvider(props: PropsWithChildren) {
   return <context.Provider value={{ data, dispatch }}>{props.children}</context.Provider>;
 }
 
-export function useGameData() {
+export function useGameState() {
   const data = useContext(context);
-  if (data === null) throw new Error("This must be used within a <GameDataProvider />.");
+  if (data === null) throw new Error("This must be used within a <GameStateProvider />.");
   return data;
 }

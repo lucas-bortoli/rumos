@@ -9,6 +9,12 @@ import QAView from "../qa_view";
 import style from "./style.module.css";
 import Trilha01 from "./trilha01.png";
 import Trilha02 from "./trilha02.png";
+import {
+  KNOWLEDGE_TRAIL_CATEGORIES,
+  KNOWLEDGE_TRAILS,
+  KnowledgeTrail,
+  KnowledgeTrailCategory,
+} from "../../Game/Data/data";
 
 interface Trilha {
   titulo: string;
@@ -33,29 +39,6 @@ export default function HomeView() {
       buttons: { ok: "OK" },
     });
   }
-
-  const trilhas: Trilha[] = [
-    {
-      titulo: "Morando sozinho, e agora?",
-      modulos: [
-        { id: 0, titulo: "Descobrindo o IPVA", background: Trilha01 },
-        { id: 1, titulo: "Tipos de financiamento", background: Trilha01 },
-        { id: 2, titulo: "Tipos de financiamento", background: Trilha01 },
-        { id: 3, titulo: "Tipos de financiamento", background: Trilha01 },
-        { id: 4, titulo: "Tipos de financiamento", background: Trilha01 },
-      ],
-    },
-    {
-      titulo: "Meu primeiro automóvel",
-      modulos: [
-        { id: 0, titulo: "Descobrindo o IPVA", background: Trilha01, disabled: true },
-        { id: 1, titulo: "Tipos de financiamento", background: Trilha02, disabled: true },
-        { id: 2, titulo: "Tipos de financiamento", background: Trilha02, disabled: true },
-        { id: 3, titulo: "Tipos de financiamento", background: Trilha02, disabled: true },
-        { id: 4, titulo: "Tipos de financiamento", background: Trilha02, disabled: true },
-      ],
-    },
-  ];
 
   const currentWindowKey = useCurrentWindowKey();
   function goTo(other: "marketplace" | "home") {
@@ -89,30 +72,30 @@ export default function HomeView() {
       <section className="px-4">
         Aqui ficam as trilhas do conhecimento disponíveis. Você pode selecionar uma para iniciar!
       </section>
-      {trilhas.map((trilha) => (
-        <section className="flex flex-col pt-2" key={trilha.titulo}>
-          <h2 className="px-4 text-xl">{trilha.titulo}</h2>
+      {KNOWLEDGE_TRAIL_CATEGORIES.map((category) => (
+        <section className="flex flex-col pt-2" key={category.id}>
+          <h2 className="px-4 text-xl">{category.title}</h2>
           <ul className="flex h-60 w-full overflow-x-scroll py-2 before:mr-4 after:ml-4">
-            {trilha.modulos.map((modulo) => (
+            {KNOWLEDGE_TRAILS.filter((t) => t.categoryId === category.id).map((trail) => (
               <motion.li
-                key={modulo.id}
-                whileTap={modulo.disabled ? undefined : { scale: 1.05 }}
+                key={trail.id}
+                whileTap={trail.isEnabled ? { scale: 1.05 } : undefined}
                 className={cn(
                   "mr-2 flex aspect-[3/4] h-full shrink-0 flex-col justify-end overflow-hidden rounded-2xl p-4 text-gray-100 shadow-md",
-                  modulo.disabled && "opacity-20 shadow-none",
+                  !trail.isEnabled && "opacity-20 shadow-none",
                   style.trilha_card
                 )}
-                style={{ "--card-bg": `url('${modulo.background}')` }}
+                style={{ "--card-bg": `url('${trail.backgroundImage}')` }}
                 onClick={() =>
-                  modulo.disabled
-                    ? trilhaNotAvailable()
-                    : windowing.createWindow({
+                  trail.isEnabled
+                    ? windowing.createWindow({
                         component: QAView,
                         props: {},
                         title: "QA",
                       })
+                    : trilhaNotAvailable()
                 }>
-                <h3 className="w-2/3 text-lg font-semibold">{modulo.titulo}</h3>
+                <h3 className="w-full text-lg font-semibold">{trail.title}</h3>
               </motion.li>
             ))}
           </ul>
