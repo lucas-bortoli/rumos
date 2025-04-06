@@ -16,9 +16,11 @@ interface CardStudyViewProps {
 
 const wrapperVariants = {
   enter: {
+    scale: 0.8,
     translateX: "100%",
   } satisfies Variant,
   active: {
+    scale: 1,
     translateX: 0,
     transition: {
       type: "spring",
@@ -28,10 +30,11 @@ const wrapperVariants = {
     },
   } satisfies Variant,
   exit: {
-    translateX: "-100%",
+    scale: 0.8,
+    translateX: "-200%",
     transition: {
-      ease: "easeOut",
-      duration: 0.2,
+      ease: "linear",
+      duration: 0.25,
     },
   } satisfies Variant,
 };
@@ -80,6 +83,21 @@ export default function CardStudyView(props: CardStudyViewProps) {
           initial="enter"
           animate="active"
           exit="exit">
+          <motion.div
+            className={cn(
+              "fixed top-1/2 left-[calc(100%-30px)] flex aspect-[3/4] w-[calc(100%-theme('spacing.16'))] max-w-96 shrink-0 -translate-y-1/2 scale-90 flex-col items-stretch overflow-hidden rounded-2xl bg-white p-8 text-center text-gray-600 shadow-2xl"
+            )}
+            initial={{ x: "100%" }}
+            animate={{
+              x: [-5, 5, -5],
+            }}
+            transition={{
+              duration: 5, // Adjust duration as needed
+              type: "linear", // optional: use a spring transition for a bouncy effect
+              repeat: Infinity,
+            }}
+            exit={{ x: "-100%", transition: { duration: 0.2 } }}
+          />
           <Card
             cardMode={cardMode}
             flipCard={() => setCardMode((m) => (m === "Back" ? "Front" : "Back"))}

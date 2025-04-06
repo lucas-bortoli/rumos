@@ -29,6 +29,17 @@ export default function Card(props: CardProps) {
     },
   });
 
+  useSwipe({
+    target: cardFrontRef,
+    threshold: 60,
+    onSwipeEnd: (direction, distance) => {
+      console.log({ direction, distance });
+      if (direction === "left") {
+        props.nextCard?.();
+      }
+    },
+  });
+
   return (
     <>
       {/* CARD BACK */}
