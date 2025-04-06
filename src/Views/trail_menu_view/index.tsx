@@ -5,7 +5,7 @@ import { BOSS_NAME, KnowledgeTrail } from "../../Game/Data/data";
 import { useWindowing, WindowKey } from "../../Lib/compass_navigator";
 import BattleView from "../battle_view";
 import CardLearningView from "../card_learning_view";
-import QAView from "../qa_view";
+import DocumentWhiteoutIntroductionView from "../qa_view";
 
 interface TrailMenuViewProps {
   trail: KnowledgeTrail;
@@ -18,7 +18,7 @@ export default function TrailMenuView(props: TrailMenuViewProps) {
   function onStudyClick() {
     if (childWindowRef.current) return;
     childWindowRef.current = windowing.createWindow({
-      title: `Study - ${props.trail.title}`,
+      title: `Card Study Introduction View - ${props.trail.title}`,
       component: CardLearningView,
       props: { trail: props.trail },
     });
@@ -26,10 +26,9 @@ export default function TrailMenuView(props: TrailMenuViewProps) {
   function onPracticeClick() {
     if (childWindowRef.current) return;
     childWindowRef.current = windowing.createWindow({
-      title: `Document View - ${props.trail.title}`,
-      component: QAView,
-      props: {},
-      backButton: false,
+      title: `Document Whiteout Introduction View - ${props.trail.title}`,
+      component: DocumentWhiteoutIntroductionView,
+      props: { trail: props.trail },
     });
   }
   function onDuelClick() {
