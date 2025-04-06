@@ -10,13 +10,16 @@ import {
 import { TELEMETRY_CLIENT_KEY, TELEMETRY_ENDPOINT } from "../Game/Data/data";
 import { persistentSequence, type Sequence } from "./sequence_generator";
 import generateUUID from "./uuid";
+import type { Action as GameStateDispatchAction } from "../Game/Data";
 
-export type TelemetryAction = {
-  kind: "WindowingToplevelChange";
-  window: {
-    title: string;
-  } | null;
-};
+export type TelemetryAction =
+  | {
+      kind: "WindowingToplevelChange";
+      window: {
+        title: string;
+      } | null;
+    }
+  | { kind: "GameStateDispatchAction"; action: GameStateDispatchAction };
 
 export interface Frame {
   /**

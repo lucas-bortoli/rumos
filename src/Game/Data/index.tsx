@@ -1,15 +1,18 @@
 import {
+  ActionDispatch,
   createContext,
   Dispatch,
   PropsWithChildren,
+  useCallback,
   useContext,
   useEffect,
   useReducer,
 } from "react";
 import { GameState, initialGameState } from "./state";
 import { loadFromLocalStorage, saveToLocalStorage } from "./storage";
+import { useTelemetry } from "../../Lib/telemetry";
 
-type Action = {
+export type Action = {
   kind: "SetUserInfo";
   info: GameState["userInfo"];
 };
@@ -33,7 +36,20 @@ export function GameStateProvider(props: PropsWithChildren) {
     saveToLocalStorage(data); // this is debounced so it's fine to call it immediately
   }, [data]);
 
-  return <context.Provider value={{ data, dispatch }}>{props.children}</context.Provider>;
+  const pushTelemetry = useTelemetry();
+  const wiretappedDispatch: ActionDispatch<[action: Action]> = useCallback(
+    (action: Action) => {
+      pushTelemetry({ kind: "GameStateDispatchAction", action });
+      dispatch(action);
+    },
+    [dispatch, pushTelemetry]
+  );
+
+  return (
+    <context.Provider value={{ data, dispatch: wiretappedDispatch }}>
+      {props.children}
+    </context.Provider>
+  );
 }
 
 export function useGameState() {
