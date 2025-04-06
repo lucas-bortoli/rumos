@@ -1,4 +1,4 @@
-import { Key, useEffect, useLayoutEffect } from "react";
+import { Key, useEffect, useLayoutEffect, useState } from "react";
 import Frame from "../../Components/Frame";
 import SpriteIcon from "../../Components/SpriteIcon";
 import { cn } from "../../Lib/class_names";
@@ -17,6 +17,7 @@ import useAlert from "../../Components/AlertDialog";
 import { BOSS_NAME } from "../../Game/Data/data";
 import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
 import { useBackButtonHandler } from "../../Lib/back_button";
+import { SongName, useBackgroundSong } from "../../Lib/sound/song_provider";
 
 interface BattleViewProps {}
 
@@ -27,14 +28,10 @@ export default function BattleView(props: BattleViewProps) {
   const showAlert = useAlert();
   const playCard1Sound = useSound({ name: "SndCards" });
   const playCard2Sound = useSound({ name: "SndCards2" });
-  const playDamageSound = useSound({ name: "SndDamage", volume: 0.6 });
+  const playDamageSound = useSound({ name: "SndDamage", volume: 0.3 });
 
-  useSound({
-    name: "MusSuspense",
-    volume: 0.5,
-    loop: true,
-    autoPlay: true,
-  });
+  const [backgroundSong, setBackgroundSong] = useState<SongName | null>("MusSuspense");
+  useBackgroundSong({ name: backgroundSong, volume: 0.5 });
 
   useLayoutEffect(() => {
     let t = setTimeout(() => {
@@ -113,6 +110,7 @@ export default function BattleView(props: BattleViewProps) {
     Run(async () => {
       const state = battle.state;
       if (state instanceof Victory) {
+        setBackgroundSong("MusBattleVictory");
         await showAlert({
           title: "Parabéns!",
           content: <p>Você venceu o duelo contra {BOSS_NAME}.</p>,
@@ -120,6 +118,7 @@ export default function BattleView(props: BattleViewProps) {
         });
         windowing.removeSpecificWindow(currentWindowKey);
       } else if (state instanceof GameOver) {
+        setBackgroundSong(null);
         await showAlert({
           title: "Sem vidas!",
           content: <p>Você perdeu o duelo contra {BOSS_NAME}.</p>,

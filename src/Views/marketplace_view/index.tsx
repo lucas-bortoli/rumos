@@ -1,14 +1,12 @@
 import { motion } from "framer-motion";
 import NavigationBarBottom from "../../Components/NavigationBarBottom";
 import { cn } from "../../Lib/class_names";
-import useSound from "../../Lib/sound";
+import { useBackgroundSong } from "../../Lib/sound/song_provider";
 
 export default function MarketplaceView() {
-  useSound({
+  useBackgroundSong({
     name: "MusShop",
     volume: 0.5,
-    loop: true,
-    autoPlay: true,
   });
 
   return (
