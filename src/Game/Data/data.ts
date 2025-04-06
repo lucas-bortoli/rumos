@@ -624,3 +624,39 @@ export const DOCUMENT_CONTRACT_HTML = `<h1><whiteout correct="CONTRATO DE LOCAÇ
 <p>1. Nome: _______ | CPF: ______</p>
 <p>2. Nome: _______ | CPF: ______</p>
 `;
+
+export type ArchievementId = string & { _tag?: "ArchievementId" };
+
+export interface Archievement {
+  id: ArchievementId;
+  title: string;
+  content: string;
+}
+
+export const ACHIEVEMENTS: Archievement[] = [
+  {
+    id: "e97b5353-d725-434e-a90f-1a2788ae9840",
+    title: "Não tem problema!",
+    content: "Errou o termo e tentou de novo.",
+  },
+  {
+    id: "1cb62bc1-032f-4fd2-92ee-ee470278a0ce",
+    title: "Guerreiro Inabalável",
+    content: "Derrote o chefe com apenas 1 ponto de vida restante.",
+  },
+  {
+    id: "d5593e2a-b556-4a5d-a0eb-d44b813a5c72",
+    title: "Mestre das Combinações",
+    content: "Realize um combo de 5 ataques.",
+  },
+  {
+    id: "e3593e2a-b556-4a5d-a1e1-d44b81725c72",
+    title: "Colecionador de Contratos",
+    content: "Conclua um contrato sem perder vida e obtenha um item bônus.",
+  },
+  {
+    id: "831b5d7c-e437-4183-8faf-14d65e7996e6",
+    title: "Perfeccionista dos Contratos",
+    content: "Conclua o contrato com 100% de precisão e receba uma recompensa exclusiva.",
+  },
+];

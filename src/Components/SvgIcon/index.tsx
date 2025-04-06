@@ -10,6 +10,7 @@ import IconTouch from "./Touch.svg?react";
 import IconArrowBack from "./ArrowBack.svg?react";
 import IconKeyboardArrowUp from "./KeyboardArrowUp.svg?react";
 import IconKeyboardArrowDown from "./KeyboardArrowDown.svg?react";
+import IconInventory from "./Inventory.svg?react";
 
 const Icons = {
   Explore: IconExplore,
@@ -22,6 +23,7 @@ const Icons = {
   ArrowBack: IconArrowBack,
   KeyboardArrowUp: IconKeyboardArrowUp,
   KeyboardArrowDown: IconKeyboardArrowDown,
+  Inventory: IconInventory,
 } as const;
 
 export type SvgIconName = keyof typeof Icons;
