@@ -4,7 +4,7 @@ import { cn } from "../../Lib/class_names";
 import { useWindowing } from "../../Lib/compass_navigator";
 import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
 import style from "./style.module.css";
-import HomeView from "../home_view";
+import RegisterForm from "./register_form";
 
 export default function WelcomeView() {
   const windowing = useWindowing();
@@ -12,13 +12,11 @@ export default function WelcomeView() {
 
   function goToNext() {
     windowing.createWindow({
-      title: "Home View",
-      component: HomeView,
+      title: "Register Form View",
+      component: RegisterForm,
       props: {},
-      noAnimation: true,
-      backButton: false,
     });
-    windowing.removeSpecificWindow(currentWindowKey);
+    // windowing.removeSpecificWindow(currentWindowKey);
   }
 
   return (

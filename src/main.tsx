@@ -9,18 +9,18 @@ import { TelemetryProvider } from "./Lib/telemetry";
 import { SongProvider } from "./Lib/sound/song_provider";
 
 createRoot(document.getElementById("root")!).render(
-  <MiniGBusProvider>
-    <BackButtonProvider>
-      <GameStateProvider>
-        <WindowManagerProvider>
-          <SongProvider>
-            <TelemetryProvider>
+  <TelemetryProvider>
+    <MiniGBusProvider>
+      <BackButtonProvider>
+        <GameStateProvider>
+          <WindowManagerProvider>
+            <SongProvider>
               <WindowsOutlet />
               <App />
-            </TelemetryProvider>
-          </SongProvider>
-        </WindowManagerProvider>
-      </GameStateProvider>
-    </BackButtonProvider>
-  </MiniGBusProvider>
+            </SongProvider>
+          </WindowManagerProvider>
+        </GameStateProvider>
+      </BackButtonProvider>
+    </MiniGBusProvider>
+  </TelemetryProvider>
 );

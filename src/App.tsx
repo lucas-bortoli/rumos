@@ -1,13 +1,13 @@
 import { useEffect } from "react";
+import { useGameState } from "./Game/Data";
 import { useWindowing } from "./Lib/compass_navigator";
-import HomeView from "./Views/home_view";
-import WelcomeView from "./Views/welcome";
 import { useTelemetry } from "./Lib/telemetry";
-import LoadingView from "./Views/loading";
+import WelcomeView from "./Views/welcome";
 
 export default function App() {
   const windowing = useWindowing();
   const pushTelemetry = useTelemetry();
+  const game = useGameState();
 
   useEffect(() => {
     const topmost = windowing.windows.at(-1);
@@ -26,7 +26,7 @@ export default function App() {
     const key = windowing.createWindow({
       component: WelcomeView,
       props: {},
-      title: "Loading View",
+      title: "Welcome View",
       noAnimation: true,
     });
     return () => windowing.removeSpecificWindow(key);

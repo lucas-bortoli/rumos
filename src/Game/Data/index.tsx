@@ -9,9 +9,18 @@ import {
 import { GameState, initialGameState } from "./state";
 import { loadFromLocalStorage, saveToLocalStorage } from "./storage";
 
-type Action = {};
+type Action = {
+  kind: "SetUserInfo";
+  info: GameState["userInfo"];
+};
 
 function reducer(previous: GameState, action: Action): GameState {
+  switch (action.kind) {
+    case "SetUserInfo": {
+      return { ...previous, userInfo: action.info };
+    }
+  }
+
   return previous;
 }
 

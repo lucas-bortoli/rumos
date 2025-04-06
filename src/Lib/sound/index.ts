@@ -35,11 +35,7 @@ export default function useSound(options: SoundOptions) {
     soundElement.current.preload = "auto";
 
     return () => {
-      if (soundElement.current) {
-        soundElement.current.pause();
-        soundElement.current.currentTime = 0;
-        soundElement.current.remove();
-      }
+      soundElement.current?.remove();
       soundElement.current = null;
     };
   }, [options.name]);
