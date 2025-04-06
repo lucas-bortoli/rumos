@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useWindowing } from "..";
-import { useBackButton } from "../../back_button";
+import { useBackButtonHandler } from "../../back_button";
 import useCurrentWindowKey from "./current_window_key_context";
 
 export default function useCurrentWindowBackButton(callback: () => void) {
@@ -9,7 +9,7 @@ export default function useCurrentWindowBackButton(callback: () => void) {
   const callbackRef = useRef(callback);
   callbackRef.current = callback;
 
-  useBackButton(() => {
+  useBackButtonHandler(() => {
     if (windowing.windows.at(-1)?.key === currentWindowKey) {
       callbackRef.current();
     }

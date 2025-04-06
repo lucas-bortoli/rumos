@@ -7,6 +7,8 @@ import Card, { CardMode } from "./Components/Card";
 import SwipeLeftHint from "./Components/SwipeLeftHint";
 import TapHint from "./Components/TapHint";
 import useCardFeed from "./use_card_feed";
+import VirtualBackButton from "../../Components/VirtualBackButton";
+import { cn } from "../../Lib/class_names";
 
 interface CardStudyViewProps {
   trail: KnowledgeTrail;
@@ -66,6 +68,9 @@ export default function CardStudyView(props: CardStudyViewProps) {
 
   return (
     <main className="bg-grey-400 relative h-full w-full overflow-x-hidden overflow-y-scroll">
+      <nav className="sticky top-0 z-10 mb-4 flex items-center gap-4 p-4 pb-3">
+        <VirtualBackButton />
+      </nav>
       <AnimatePresence>
         <motion.div
           key={card.id}

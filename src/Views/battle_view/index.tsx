@@ -16,7 +16,7 @@ import ZoomedCard from "./Components/zoomed_card";
 import useAlert from "../../Components/AlertDialog";
 import { BOSS_NAME } from "../../Game/Data/data";
 import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
-import { useBackButton } from "../../Lib/back_button";
+import { useBackButtonHandler } from "../../Lib/back_button";
 
 interface BattleViewProps {}
 
@@ -130,7 +130,7 @@ export default function BattleView(props: BattleViewProps) {
     });
   }, [battle.state]);
 
-  useBackButton(async () => {
+  useBackButtonHandler(async () => {
     if (windowing.windows.at(-1)?.key !== currentWindowKey) return;
 
     const choice = await showAlert({

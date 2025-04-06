@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "react";
 import SvgIcon from "../../Components/SvgIcon";
+import VirtualBackButton from "../../Components/VirtualBackButton";
 import { BOSS_NAME, KnowledgeTrail } from "../../Game/Data/data";
 import { useWindowing, WindowKey } from "../../Lib/compass_navigator";
 import BattleView from "../battle_view";
-import QAView from "../qa_view";
 import CardLearningView from "../card_learning_view";
+import QAView from "../qa_view";
 
 interface TrailMenuViewProps {
   trail: KnowledgeTrail;
@@ -61,7 +62,8 @@ export default function TrailMenuView(props: TrailMenuViewProps) {
 
   return (
     <main className="relative h-full w-full overflow-x-hidden overflow-y-scroll bg-white pb-20">
-      <nav className="border-grey-200 sticky top-0 z-10 mt-8 flex items-center gap-2 border-b bg-white p-4 pb-3">
+      <nav className="border-grey-200 sticky top-0 z-10 mt-8 flex items-center gap-4 border-b bg-white p-4 pb-3">
+        <VirtualBackButton />
         <h1 className="text-xl">{props.trail.title}</h1>
       </nav>
       <section className="border-grey-400 flex border-b px-4 py-4" onClick={onStudyClick}>

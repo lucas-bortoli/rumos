@@ -1,6 +1,6 @@
 import { App, BackButtonListenerEvent } from "@capacitor/app";
 import { PluginListenerHandle } from "@capacitor/core";
-import { PropsWithChildren, useEffect, useRef } from "react";
+import { PropsWithChildren, useCallback, useEffect, useMemo, useRef } from "react";
 import { useMiniGBus } from "./gbus_mini";
 
 export function BackButtonProvider(props: PropsWithChildren) {
@@ -42,7 +42,7 @@ export function BackButtonProvider(props: PropsWithChildren) {
   return props.children;
 }
 
-export function useBackButton(callback: () => void) {
+export function useBackButtonHandler(callback: () => void) {
   const gbus = useMiniGBus();
   const callbackRef = useRef(callback);
   callbackRef.current = callback;
@@ -54,4 +54,15 @@ export function useBackButton(callback: () => void) {
 
     return () => gbus.unsubscribe(handle);
   }, [gbus]);
+}
+
+export function useBackButtonTrigger() {
+  const gbus = useMiniGBus();
+
+  return useCallback(
+    function trigger() {
+      gbus.publish("backButton", null);
+    },
+    [gbus]
+  );
 }

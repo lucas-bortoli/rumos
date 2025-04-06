@@ -7,6 +7,7 @@ import IconHotelClass from "./HotelClass.svg?react";
 import IconSwipeVertical from "./SwipeVertical.svg?react";
 import IconChevronRight from "./ChevronRight.svg?react";
 import IconTouch from "./Touch.svg?react";
+import IconArrowBack from "./ArrowBack.svg?react";
 
 const Icons = {
   Explore: IconExplore,
@@ -16,6 +17,7 @@ const Icons = {
   SwipeVertical: IconSwipeVertical,
   ChevronRight: IconChevronRight,
   Touch: IconTouch,
+  ArrowBack: IconArrowBack,
 } as const;
 
 export type SvgIconName = keyof typeof Icons;

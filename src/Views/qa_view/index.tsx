@@ -7,6 +7,7 @@ import { cn } from "../../Lib/class_names";
 import { addListener, removeListener } from "../../Lib/event_manager";
 import findElementInParents from "../../Lib/find_element_in_parents";
 import qaStyle from "./qa.module.css";
+import VirtualBackButton from "../../Components/VirtualBackButton";
 
 const MotionFrame = motion.create(Frame);
 
@@ -89,7 +90,8 @@ export default function QAView() {
 
   return (
     <main className="flex h-full w-full flex-col overflow-hidden bg-white">
-      <nav className="flex items-center gap-2 border-b border-gray-200 bg-white p-4">
+      <nav className="flex items-center gap-2 gap-4 border-b border-gray-200 bg-white p-4">
+        <VirtualBackButton />
         <h1 className="text-xl">Meu Contrato de Locação</h1>
       </nav>
       <div className="relative shrink grow overflow-auto">

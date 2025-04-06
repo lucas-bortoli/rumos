@@ -1,4 +1,5 @@
 import Button from "../../Components/Button";
+import VirtualBackButton from "../../Components/VirtualBackButton";
 import { KnowledgeTrail } from "../../Game/Data/data";
 import { useWindowing } from "../../Lib/compass_navigator";
 import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
@@ -24,7 +25,8 @@ export default function CardLearningView(props: CardLearningViewProps) {
 
   return (
     <main className="relative h-full w-full overflow-x-hidden overflow-y-scroll bg-white">
-      <nav className="border-grey-200 sticky top-0 z-10 mt-8 mb-4 flex items-center gap-2 border-b bg-white p-4 pb-3">
+      <nav className="border-grey-200 sticky top-0 z-10 mt-8 mb-4 flex items-center gap-4 border-b bg-white p-4 pb-3">
+        <VirtualBackButton />
         <h1 className="text-xl">Estudo</h1>
       </nav>
       <section className="flex flex-col items-center gap-4 text-center">
