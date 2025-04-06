@@ -29,6 +29,7 @@ export default function TrailMenuView(props: TrailMenuViewProps) {
       title: `Document View - ${props.trail.title}`,
       component: QAView,
       props: {},
+      backButton: false,
     });
   }
   function onDuelClick() {

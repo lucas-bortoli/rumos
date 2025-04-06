@@ -1,5 +1,5 @@
 import { motion, Variant } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import DocumentArticle from "../../Components/DocumentArticle";
 import Frame from "../../Components/Frame";
 import { DOCUMENT_CONTRACT_HTML } from "../../Game/Data/data";
@@ -8,6 +8,13 @@ import { addListener, removeListener } from "../../Lib/event_manager";
 import findElementInParents from "../../Lib/find_element_in_parents";
 import qaStyle from "./qa.module.css";
 import VirtualBackButton from "../../Components/VirtualBackButton";
+import generateUUID from "../../Lib/uuid";
+import { useMap } from "../../Lib/use_map";
+import { useBackButtonHandler } from "../../Lib/back_button";
+import { useWindowing } from "../../Lib/compass_navigator";
+import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
+import useAlert from "../../Components/AlertDialog";
+import SvgIcon from "../../Components/SvgIcon";
 
 const MotionFrame = motion.create(Frame);
 
@@ -35,9 +42,34 @@ const variants = {
   } satisfies Variant,
 };
 
+type ChoiceId = string & { _tag?: "choiceId" };
+
+interface Choice {
+  id: ChoiceId;
+  content: string;
+}
+
+type WhiteoutId = string & { _tag?: "whiteoutId" };
+
+interface Whiteout {
+  id: WhiteoutId;
+  correctContent: string;
+}
+
+function getWhiteout(whiteout: Whiteout | WhiteoutId) {
+  const id = typeof whiteout === "string" ? whiteout : whiteout.id;
+  return document.querySelector(`[x-whiteout-id="${id}"]`)! as HTMLElement;
+}
+
+function censor(text: string) {
+  return text; //text.replace(/[^\wç]/gi, " ").replace(/[\wç]/gi, ".");
+}
+
 export default function QAView() {
-  const [choices, setChoices] = useState<string[]>([]);
-  const [clickedWhiteout, setClickedWhiteout] = useState<HTMLElement | null>(null);
+  const [choices, setChoices] = useMap<ChoiceId, Choice>([]);
+  const [whiteouts, setWhiteouts] = useMap<WhiteoutId, Whiteout>([]);
+  const [choiceToWhiteout, setChoiceToWhiteout] = useMap<ChoiceId, WhiteoutId>([]);
+  const [clickedWhiteoutId, setClickedWhiteoutId] = useState<WhiteoutId | null>(null);
 
   const articleRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -51,24 +83,54 @@ export default function QAView() {
     //s@ts-expect-error
     //window.setDeckVisible = setDeckVisible;
 
-    const whiteouts = [...article.querySelectorAll("whiteout")] as HTMLElement[];
-    const choices = whiteouts.map((w) => w.getAttribute("correct")!);
+    const $whiteouts = [...article.querySelectorAll("whiteout")] as HTMLElement[];
 
-    console.log({ whiteouts, choices });
-
-    whiteouts.forEach((w) => {
-      const correctContent = w.getAttribute("correct")!;
-      w.innerText = correctContent.replace(/[^\wç]/gi, " ").replace(/[\wç]/gi, ".");
-      w.className = cn(
-        "font-mono bg-amber-200 shadow-inset-pixel text-transparent",
-        qaStyle.whiteout
-      );
+    $whiteouts.forEach((w) => {
+      w.setAttribute("x-whiteout-id", generateUUID());
     });
 
-    setChoices(choices);
+    const whiteouts: Whiteout[] = $whiteouts.map((w) => ({
+      id: w.getAttribute("x-whiteout-id")!,
+      correctContent: w.getAttribute("correct")!,
+      selectedChoice: null,
+    }));
+
+    const choices: Choice[] = $whiteouts.map((w) => ({
+      id: generateUUID(),
+      content: w.getAttribute("correct")!,
+      used: false,
+    }));
+
+    console.log({ choices, whiteouts });
+
+    setClickedWhiteoutId(whiteouts[0].id);
+
+    setChoices.reset();
+    setChoices.setAll(choices.map((c) => [c.id, c]));
+    setWhiteouts.reset();
+    setWhiteouts.setAll(whiteouts.map((w) => [w.id, w]));
+    setChoiceToWhiteout.reset();
 
     return () => {};
   }, []);
+
+  useLayoutEffect(() => {
+    // reset all styles
+    whiteouts.forEach((whiteout) => {
+      const $whiteout = getWhiteout(whiteout);
+      $whiteout.innerText = censor(whiteout.correctContent);
+      $whiteout.classList.add(qaStyle.whiteout);
+      $whiteout.classList.toggle(qaStyle.populated, false);
+      $whiteout.classList.toggle(qaStyle.clicked, clickedWhiteoutId === whiteout.id);
+    });
+
+    choiceToWhiteout.forEach((whiteoutId, choiceId) => {
+      const choice = choices.get(choiceId)!;
+      const $whiteout = getWhiteout(whiteoutId);
+      $whiteout.classList.toggle(qaStyle.populated, true);
+      $whiteout.innerText = choice.content;
+    });
+  }, [whiteouts, choiceToWhiteout, choices, clickedWhiteoutId]);
 
   useEffect(() => {
     const article = articleRef.current;
@@ -78,9 +140,9 @@ export default function QAView() {
       if (!(event.target instanceof HTMLElement)) return;
       const targetWhiteout = findElementInParents(event.target, (e) => e.tagName === "WHITEOUT");
       if (targetWhiteout) {
-        setClickedWhiteout(targetWhiteout);
+        setClickedWhiteoutId(targetWhiteout.getAttribute("x-whiteout-id"));
       } else {
-        setClickedWhiteout(null);
+        setClickedWhiteoutId(null);
       }
     });
     return () => {
@@ -88,33 +150,84 @@ export default function QAView() {
     };
   }, []);
 
+  function handleListItemClick(choice: Choice) {
+    if (!clickedWhiteoutId) return;
+
+    const correspondingWhiteoutId = choiceToWhiteout.get(choice.id);
+
+    choiceToWhiteout.forEach((val, key) => {
+      if (val === clickedWhiteoutId) {
+        setChoiceToWhiteout.remove(key);
+      }
+    });
+
+    setChoiceToWhiteout.set(choice.id, clickedWhiteoutId);
+  }
+
+  const windowing = useWindowing();
+  const currentWindowKey = useCurrentWindowKey();
+  const showAlert = useAlert();
+  useBackButtonHandler(async () => {
+    if (windowing.windows.at(-1)?.key !== currentWindowKey) return;
+
+    const choice = await showAlert({
+      title: "Sair mesmo?",
+      content: <p>O preenchimento do documento será perdido.</p>,
+      buttons: { cancel: "Não", confirm: "Sair" },
+    });
+    if (choice === "cancel") return;
+    setTimeout(() => {
+      windowing.removeSpecificWindow(currentWindowKey);
+    }, 300);
+  });
+
+  const [footerExpanded, setFooterExpanded] = useState(false);
+
   return (
     <main className="flex h-full w-full flex-col overflow-hidden bg-white">
-      <nav className="flex items-center gap-2 gap-4 border-b border-gray-200 bg-white p-4">
+      <nav className="flex items-center gap-4 border-b border-gray-200 bg-white p-4">
         <VirtualBackButton />
         <h1 className="text-xl">Meu Contrato de Locação</h1>
       </nav>
       <div className="relative shrink grow overflow-auto">
         <DocumentArticle className={cn("bg-grey-100 p-8 pb-96")} ref={articleRef} />
       </div>
-      {/* deck */}
-      <MotionFrame
-        key="deck"
-        className="fixed bottom-2 left-2 h-48 w-[calc(100%-theme('spacing.4'))]"
-        animate={{ scale: clickedWhiteout ? 1 : 0 }}>
-        <ul className="flex h-full w-full flex-wrap gap-2 overflow-y-scroll p-2">
-          {choices.map((choice, i) => {
+      <motion.footer
+        className="fixed bottom-0 left-0 flex w-full flex-col border-t border-gray-200 bg-white"
+        animate={{ y: footerExpanded ? 0 : 128 }}>
+        <div className="flex items-center gap-2 p-4">
+          <button onClick={setFooterExpanded.bind(null, !footerExpanded)}>
+            <SvgIcon
+              icon={footerExpanded ? "KeyboardArrowDown" : "KeyboardArrowUp"}
+              className="!h-8"
+            />
+          </button>
+          {choiceToWhiteout.size} / {whiteouts.size}
+        </div>
+        <ul className="h-32 w-full overflow-y-scroll px-4 pb-4">
+          {[...choices.values()].map((choice, i) => {
+            const choiceWasUsed = choiceToWhiteout.has(choice.id);
+
             return (
               <motion.li
                 key={`${choice}_${i}`}
                 whileTap={{ scale: 1.05 }}
-                className="mr-2 inline-flex shrink-0 flex-col items-stretch justify-end overflow-hidden rounded-lg bg-white p-4 text-gray-600 shadow-sm">
-                <span className="">{choice}</span>
+                className={cn(
+                  "bg-grey-800 text-grey-200 mr-2 mb-2 inline-block rounded-lg p-2 shadow-sm",
+                  choiceWasUsed && "line-through"
+                )}
+                onClick={handleListItemClick.bind(null, choice)}>
+                <span>{choice.content}</span>
               </motion.li>
             );
           })}
         </ul>
-      </MotionFrame>
+      </motion.footer>
+      {/* deck */}
+      {/*<MotionFrame
+        key="deck"
+        className="fixed bottom-2 left-2 h-48 w-[calc(100%-theme('spacing.4'))]"
+        animate={{ scale: clickedWhiteoutId ? 1 : 0 }}></MotionFrame>*/}
     </main>
   );
 }

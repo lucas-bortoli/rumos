@@ -593,7 +593,7 @@ export const DOCUMENT_CONTRACT_HTML = `<h1><whiteout correct="CONTRATO DE LOCAÇ
 <div>
   <h3>CLÁUSULA 8 - DA RESCISÃO CONTRATUAL</h3>
   <p>
-    A rescisão antecipada do contrato por iniciativa de qualquer das partes
+    A <whiteout correct="rescisão antecipada"></whiteout> do contrato por iniciativa de qualquer das partes
     deverá ser comunicada por escrito com antecedência mínima de 30 (trinta)
     dias. Em caso de rescisão imotivada pela LOCATÁRIA, será devida multa
     compensatória no valor de 3 (três) aluguéis vigentes, proporcional ao tempo

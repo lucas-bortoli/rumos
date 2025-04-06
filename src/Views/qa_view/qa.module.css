@@ -1,4 +1,23 @@
 .whiteout {
   font-size: inherit;
   display: inline-block;
+  font-family: inherit;
+  background: rgb(255, 254, 188);
+  color: transparent;
+  box-shadow:
+    inset 2px 2px 0 #000,
+    inset -1px -1px 0 #000;
+  padding: 0 1ch;
+}
+
+/* quando o whiteout foi preenchido pelo usuario */
+.whiteout.populated {
+  color: inherit;
+}
+
+.whiteout.clicked {
+  background: #fff;
+  box-shadow:
+    inset 2px 2px 0 #2685bd,
+    inset -1px -1px 0 #2685bd;
 }

@@ -8,6 +8,8 @@ import IconSwipeVertical from "./SwipeVertical.svg?react";
 import IconChevronRight from "./ChevronRight.svg?react";
 import IconTouch from "./Touch.svg?react";
 import IconArrowBack from "./ArrowBack.svg?react";
+import IconKeyboardArrowUp from "./KeyboardArrowUp.svg?react";
+import IconKeyboardArrowDown from "./KeyboardArrowDown.svg?react";
 
 const Icons = {
   Explore: IconExplore,
@@ -18,6 +20,8 @@ const Icons = {
   ChevronRight: IconChevronRight,
   Touch: IconTouch,
   ArrowBack: IconArrowBack,
+  KeyboardArrowUp: IconKeyboardArrowUp,
+  KeyboardArrowDown: IconKeyboardArrowDown,
 } as const;
 
 export type SvgIconName = keyof typeof Icons;
