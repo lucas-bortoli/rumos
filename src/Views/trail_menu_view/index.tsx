@@ -36,6 +36,7 @@ export default function TrailMenuView(props: TrailMenuViewProps) {
       title: `Duel - ${props.trail.title} - ${BOSS_NAME}`,
       component: BattleView,
       props: {},
+      backButton: false,
     });
   }
 

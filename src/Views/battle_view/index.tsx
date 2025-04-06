@@ -13,15 +13,21 @@ import style from "./style.module.css";
 import useScrollingText from "./Hooks/use_scrolling_text";
 import useStateEffect from "./Hooks/use_state_effect";
 import ZoomedCard from "./Components/zoomed_card";
+import useAlert from "../../Components/AlertDialog";
+import { BOSS_NAME } from "../../Game/Data/data";
+import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
+import { useBackButton } from "../../Lib/back_button";
 
 interface BattleViewProps {}
 
 export default function BattleView(props: BattleViewProps) {
   const battle = useImperativeObject(() => new Battle());
   const windowing = useWindowing();
+  const currentWindowKey = useCurrentWindowKey();
+  const showAlert = useAlert();
   const playCard1Sound = useSound({ name: "SndCards" });
   const playCard2Sound = useSound({ name: "SndCards2" });
-  const playDamageSound = useSound({ name: "SndDamage" });
+  const playDamageSound = useSound({ name: "SndDamage", volume: 0.6 });
 
   useSound({
     name: "MusSuspense",
@@ -103,7 +109,40 @@ export default function BattleView(props: BattleViewProps) {
     [battle.playerHp, battle.opponentHp] as const
   );
 
-  useEffect(() => {}, [battle.state]);
+  useEffect(() => {
+    Run(async () => {
+      const state = battle.state;
+      if (state instanceof Victory) {
+        await showAlert({
+          title: "Parabéns!",
+          content: <p>Você venceu o duelo contra {BOSS_NAME}.</p>,
+          buttons: { ok: "OK" },
+        });
+        windowing.removeSpecificWindow(currentWindowKey);
+      } else if (state instanceof GameOver) {
+        await showAlert({
+          title: "Sem vidas!",
+          content: <p>Você perdeu o duelo contra {BOSS_NAME}.</p>,
+          buttons: { ok: "OK" },
+        });
+        windowing.removeSpecificWindow(currentWindowKey);
+      }
+    });
+  }, [battle.state]);
+
+  useBackButton(async () => {
+    if (windowing.windows.at(-1)?.key !== currentWindowKey) return;
+
+    const choice = await showAlert({
+      title: "Desistir do duelo?",
+      content: <p>Deseja mesmo desistir do duelo?</p>,
+      buttons: { cancel: "Não", confirm: "Desistir" },
+    });
+    if (choice === "cancel") return;
+    setTimeout(() => {
+      windowing.removeSpecificWindow(currentWindowKey);
+    }, 300);
+  });
 
   const visibleDialog = useScrollingText(battle.state?.textBoxContent ?? "...", 8);
 

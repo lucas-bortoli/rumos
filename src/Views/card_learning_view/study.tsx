@@ -1,19 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-import SvgIcon from "../../Components/SvgIcon";
-import { BOSS_NAME, KnowledgeTrail } from "../../Game/Data/data";
-import { useWindowing, WindowKey } from "../../Lib/compass_navigator";
-import BattleView from "../battle_view";
-import QAView from "../qa_view";
-import Button from "../../Components/Button";
-import Img1 from "./trilha02.png";
 import { AnimatePresence, motion, Variant } from "framer-motion";
-import { cn } from "../../Lib/class_names";
-import SwipeLeftHint from "./Components/SwipeLeftHint";
-import TapHint from "./Components/TapHint";
-import Card, { CardMode } from "./Components/Card";
-import useCardFeed from "./use_card_feed";
+import { useEffect, useRef, useState } from "react";
+import { KnowledgeTrail } from "../../Game/Data/data";
 import useSound from "../../Lib/sound";
 import useUpdateEffect from "../../Lib/use_update_effect";
+import Card, { CardMode } from "./Components/Card";
+import SwipeLeftHint from "./Components/SwipeLeftHint";
+import TapHint from "./Components/TapHint";
+import useCardFeed from "./use_card_feed";
 
 interface CardStudyViewProps {
   trail: KnowledgeTrail;

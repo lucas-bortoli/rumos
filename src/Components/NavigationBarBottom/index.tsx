@@ -3,6 +3,7 @@ import { useWindowing } from "../../Lib/compass_navigator";
 import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
 import HomeView from "../../Views/home_view";
 import MarketplaceView from "../../Views/marketplace_view";
+import QuestsView from "../../Views/quests_view";
 import SvgIcon, { SvgIconName } from "../SvgIcon";
 
 type Screen = "Home" | "Marketplace" | "Quests";
@@ -16,6 +17,8 @@ export default function NavigationBarBottom(props: NavigationBarBottomProps) {
   const currentWindowKey = useCurrentWindowKey();
 
   function goTo(screen: Screen) {
+    if (props.currentScreen === screen) return; // noop
+
     switch (screen) {
       case "Home":
         windowing.createWindow({
@@ -30,6 +33,14 @@ export default function NavigationBarBottom(props: NavigationBarBottomProps) {
           component: MarketplaceView,
           props: {},
           title: "Marketplace",
+          noAnimation: true,
+        });
+        break;
+      case "Quests":
+        windowing.createWindow({
+          component: QuestsView,
+          props: {},
+          title: "Minhas Quests",
           noAnimation: true,
         });
         break;

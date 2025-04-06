@@ -49,10 +49,7 @@ export default function Card(props: CardProps) {
           type: "spring", // optional: use a spring transition for a bouncy effect
         }}
         onTap={props.flipCard}>
-        <SvgIcon
-          icon="Explore"
-          className="absolute right-0 translate-x-1/2 -scale-x-100 text-amber-700 opacity-20"
-        />
+        <SvgIcon icon="Explore" className="absolute -translate-x-1/2 text-amber-700 opacity-20" />
         {props.back}
       </motion.div>
 
@@ -74,7 +71,10 @@ export default function Card(props: CardProps) {
           type: "spring", // optional: use a spring transition for a bouncy effect
         }}
         onTap={props.flipCard}>
-        <SvgIcon icon="Explore" className="absolute -translate-x-1/2 text-amber-700 opacity-20" />
+        <SvgIcon
+          icon="Explore"
+          className="absolute right-0 translate-x-1/2 -scale-x-100 text-amber-700 opacity-20"
+        />
         {props.front}
       </motion.div>
     </>
