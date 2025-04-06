@@ -3,6 +3,7 @@ import { useWindowing } from "./Lib/compass_navigator";
 import HomeView from "./Views/home_view";
 import WelcomeView from "./Views/welcome";
 import { useTelemetry } from "./Lib/telemetry";
+import LoadingView from "./Views/loading";
 
 export default function App() {
   const windowing = useWindowing();
@@ -23,9 +24,10 @@ export default function App() {
 
   useEffect(() => {
     const key = windowing.createWindow({
-      component: HomeView,
+      component: WelcomeView,
       props: {},
-      title: "Home View",
+      title: "Loading View",
+      noAnimation: true,
     });
     return () => windowing.removeSpecificWindow(key);
   }, []);

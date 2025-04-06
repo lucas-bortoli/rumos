@@ -1,0 +1,7 @@
+.container {
+  background-color: white;
+  background-image: url("./welcome.png");
+  background-position: bottom -100px center;
+  background-size: min(100vw, 720px);
+  background-repeat: no-repeat;
+}

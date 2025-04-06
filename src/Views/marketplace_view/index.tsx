@@ -12,9 +12,13 @@ export default function MarketplaceView() {
   });
 
   return (
-    <main className="relative h-full w-full overflow-x-hidden overflow-y-scroll bg-white pb-20">
+    <motion.main
+      className="relative h-full w-full overflow-x-hidden overflow-y-scroll bg-white pb-20"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1, transition: { duration: 0.3 } }}
+      exit={{ opacity: 0 }}>
       <nav className="border-grey-200 sticky top-0 z-10 mt-8 mb-4 flex items-center gap-2 border-b bg-white p-4 pb-3">
-        <h1 className="text-xl">Loja</h1>
+        <h1 className="text-xl">Marketplace</h1>
       </nav>
       <section className="px-4">Essa é a marketplace.</section>
       {[0, 1, 3].map((categoria) => (
@@ -35,6 +39,6 @@ export default function MarketplaceView() {
         </section>
       ))}
       <NavigationBarBottom currentScreen="Marketplace" />
-    </main>
+    </motion.main>
   );
 }
