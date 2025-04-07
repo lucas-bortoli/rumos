@@ -116,7 +116,7 @@ export default function RegisterForm() {
   return (
     <div
       className={cn(
-        "relative mx-auto flex h-full w-full max-w-[768px] flex-col items-stretch gap-4 p-8",
+        "relative mx-auto flex h-full w-full max-w-[768px] flex-col items-stretch gap-4 overflow-y-scroll p-8",
         style.container
       )}>
       <h1 className="text-2xl">Antes de tudo...</h1>
