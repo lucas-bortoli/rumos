@@ -15,6 +15,7 @@ import { useWindowing } from "../../Lib/compass_navigator";
 import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
 import useAlert from "../../Components/AlertDialog";
 import SvgIcon from "../../Components/SvgIcon";
+import Button from "../../Components/Button";
 
 const MotionFrame = motion.create(Frame);
 
@@ -71,6 +72,8 @@ export default function DocumentWhiteoutView() {
   const [choiceToWhiteout, setChoiceToWhiteout] = useMap<ChoiceId, WhiteoutId>([]);
   const [clickedWhiteoutId, setClickedWhiteoutId] = useState<WhiteoutId | null>(null);
 
+  const [correctnessMap, setCorrectnessMap] = useMap<WhiteoutId, boolean>([]);
+
   const articleRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     const article = articleRef.current;
@@ -122,6 +125,16 @@ export default function DocumentWhiteoutView() {
       $whiteout.classList.add(qaStyle.whiteout);
       $whiteout.classList.toggle(qaStyle.populated, false);
       $whiteout.classList.toggle(qaStyle.clicked, clickedWhiteoutId === whiteout.id);
+
+      $whiteout.classList.toggle(qaStyle.correct, false);
+      $whiteout.classList.toggle(qaStyle.incorrect, false);
+
+      const correctness = correctnessMap.get(whiteout.id) ?? null;
+      if (correctness === true) {
+        $whiteout.classList.toggle(qaStyle.correct, true);
+      } else if (correctness === false) {
+        $whiteout.classList.toggle(qaStyle.incorrect, true);
+      }
     });
 
     choiceToWhiteout.forEach((whiteoutId, choiceId) => {
@@ -130,7 +143,7 @@ export default function DocumentWhiteoutView() {
       $whiteout.classList.toggle(qaStyle.populated, true);
       $whiteout.innerText = choice.content;
     });
-  }, [whiteouts, choiceToWhiteout, choices, clickedWhiteoutId]);
+  }, [whiteouts, choiceToWhiteout, choices, clickedWhiteoutId, correctnessMap]);
 
   useEffect(() => {
     const article = articleRef.current;
@@ -153,8 +166,6 @@ export default function DocumentWhiteoutView() {
   function handleListItemClick(choice: Choice) {
     if (!clickedWhiteoutId) return;
 
-    const correspondingWhiteoutId = choiceToWhiteout.get(choice.id);
-
     choiceToWhiteout.forEach((val, key) => {
       if (val === clickedWhiteoutId) {
         setChoiceToWhiteout.remove(key);
@@ -163,6 +174,62 @@ export default function DocumentWhiteoutView() {
 
     setChoiceToWhiteout.set(choice.id, clickedWhiteoutId);
   }
+
+  function doValidate() {
+    setCorrectnessMap.reset();
+    setClickedWhiteoutId(null);
+
+    let score = whiteouts.size; // start with perfect score
+
+    const whiteoutToChoice = new Map([...choiceToWhiteout.entries()].map(([k, v]) => [v, k]));
+
+    // remove score for each item missing
+    whiteouts.forEach((whiteout) => {
+      if (!whiteoutToChoice.has(whiteout.id)) {
+        score--;
+        setCorrectnessMap.set(whiteout.id, false);
+      }
+    });
+
+    // remove score for wrong items
+    choiceToWhiteout.forEach((whiteoutId, choiceId) => {
+      const choice = choices.get(choiceId)!;
+      const whiteout = whiteouts.get(whiteoutId)!;
+
+      if (whiteout.correctContent.trim() !== choice.content.trim()) {
+        score--;
+        setCorrectnessMap.set(whiteout.id, false);
+      } else {
+        setCorrectnessMap.set(whiteout.id, true);
+      }
+    });
+
+    showAlert({
+      title: "Preenchimento do Documento",
+      content: (
+        <div>
+          <p>
+            Sua pontuação:{" "}
+            <b className="font-bold">
+              {score} de {whiteouts.size} pontos
+            </b>
+            .
+          </p>
+          {score === whiteouts.size ? (
+            <p>Parabéns! Você obteve uma pontuação perfeita.</p>
+          ) : (
+            <p>
+              Vamos tentar novamente? Ainda faltam alguns campos a serem preenchidos corretamente.
+            </p>
+          )}
+        </div>
+      ),
+      buttons: { ok: "OK" },
+    });
+  }
+
+  //@ts-expect-error
+  window.doValidate = doValidate;
 
   const windowing = useWindowing();
   const currentWindowKey = useCurrentWindowKey();
@@ -202,7 +269,13 @@ export default function DocumentWhiteoutView() {
               className="!h-8"
             />
           </button>
-          {choiceToWhiteout.size} / {whiteouts.size}
+          <span className="shrink grow basis-0">
+            {choiceToWhiteout.size} / {whiteouts.size} preenchidos
+          </span>
+          <Button onClick={doValidate} className="flex items-center gap-2">
+            <SvgIcon icon="Touch" className="!h-4" />
+            Validar
+          </Button>
         </div>
         <ul className="h-32 w-full overflow-y-scroll px-4 pb-4">
           {[...choices.values()].map((choice, i) => {
@@ -223,11 +296,6 @@ export default function DocumentWhiteoutView() {
           })}
         </ul>
       </motion.footer>
-      {/* deck */}
-      {/*<MotionFrame
-        key="deck"
-        className="fixed bottom-2 left-2 h-48 w-[calc(100%-theme('spacing.4'))]"
-        animate={{ scale: clickedWhiteoutId ? 1 : 0 }}></MotionFrame>*/}
     </main>
   );
 }
