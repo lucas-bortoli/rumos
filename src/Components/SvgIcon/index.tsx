@@ -14,6 +14,7 @@ import IconInventory from "./Inventory.svg?react";
 import IconStorefront from "./Storefront.svg?react";
 import IconForYou from "./ForYou.svg?react";
 import IconLock from "./Lock.svg?react";
+import IconVolunteerActivism from "./VolunteerActivism.svg?react";
 
 const Icons = {
   Explore: IconExplore,
@@ -30,6 +31,7 @@ const Icons = {
   Storefront: IconStorefront,
   ForYou: IconForYou,
   Lock: IconLock,
+  VolunteerActivism: IconVolunteerActivism,
 } as const;
 
 export type SvgIconName = keyof typeof Icons;

@@ -1,12 +1,13 @@
 import { cn } from "../../Lib/class_names";
 import { useWindowing } from "../../Lib/compass_navigator";
 import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
+import FeedbackTabView from "../../Views/feedback_tab";
 import HomeView from "../../Views/home_view";
 import MarketplaceView from "../../Views/marketplace_view";
 import QuestsView from "../../Views/quests_view";
 import SvgIcon, { SvgIconName } from "../SvgIcon";
 
-type Screen = "Home" | "Marketplace" | "Quests";
+type Screen = "Home" | "Marketplace" | "Quests" | "Feedback";
 
 interface NavigationBarBottomProps {
   currentScreen: Screen | null;
@@ -44,6 +45,14 @@ export default function NavigationBarBottom(props: NavigationBarBottomProps) {
           noAnimation: true,
         });
         break;
+      case "Feedback":
+        windowing.createWindow({
+          component: FeedbackTabView,
+          props: {},
+          title: "FeedbackTab",
+          noAnimation: true,
+        });
+        break;
       default:
         return;
     }
@@ -52,13 +61,14 @@ export default function NavigationBarBottom(props: NavigationBarBottomProps) {
   }
 
   return (
-    <footer className="bg-grey-100 border-grey-200 fixed bottom-0 left-0 z-10 flex w-full items-center border-t px-16 py-4">
+    <footer className="bg-grey-100 border-grey-200 fixed bottom-0 left-0 z-10 flex w-full items-center border-t px-8 py-4">
       <div className="text-grey-400 flex h-12 w-full items-center justify-between">
         {(
           [
             ["Marketplace", "Storefront"],
             ["Home", "ForYou"],
             ["Quests", "HotelClass"],
+            ["Feedback", "VolunteerActivism"],
           ] satisfies [Screen, SvgIconName][]
         ).map(([screen, icon]) => {
           return (
