@@ -7,8 +7,10 @@ export interface GameState {
     age: number;
     distributionSource: string;
   } | null;
+  userGaveFeedback: boolean;
 }
 
 export const initialGameState: GameState = {
   userInfo: null,
+  userGaveFeedback: false,
 };

@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import NavigationBarBottom from "../../Components/NavigationBarBottom";
 import { cn } from "../../Lib/class_names";
 import { useBackgroundSong } from "../../Lib/sound/song_provider";
+import { MARKETPLACE_ITEMS } from "../../Game/Data/data";
+import style from "./style.module.css";
 
 export default function MarketplaceView() {
   useBackgroundSong({
@@ -11,7 +13,7 @@ export default function MarketplaceView() {
 
   return (
     <motion.main
-      className="relative h-full w-full overflow-x-hidden overflow-y-scroll bg-white pb-20"
+      className="relative h-full w-full overflow-x-hidden overflow-y-scroll bg-white pb-40"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { duration: 0.3 } }}
       exit={{ opacity: 0 }}>
@@ -19,18 +21,23 @@ export default function MarketplaceView() {
         <h1 className="text-xl">Marketplace</h1>
       </nav>
       <section className="px-4">Essa é a marketplace. Aqui, nossos parceiros.</section>
-      {[0, 1, 3].map((categoria) => (
+      {Object.entries(MARKETPLACE_ITEMS).map(([categoria, items]) => (
         <section className="flex flex-col pt-2" key={categoria}>
-          <h2 className="px-4 text-xl">Quadros</h2>
+          <h2 className="px-4 text-xl">{categoria}</h2>
           <ul className="flex h-60 w-full overflow-x-scroll py-2 before:mr-4 after:ml-4">
-            {[0, 1, 2, 3, 4, 5, 6, 7].map((item) => (
+            {items.map((item) => (
               <motion.li
-                key={item}
+                key={item.id}
                 whileTap={{ scale: 1.05 }}
                 className={cn(
-                  "mr-2 flex aspect-[3/4] h-full shrink-0 flex-col justify-end overflow-hidden rounded-2xl p-4 text-gray-100 shadow-md"
-                )}>
-                <h3 className="w-2/3 text-lg font-semibold">Quadro {item}</h3>
+                  "mr-2 flex aspect-[3/4] h-full shrink-0 flex-col justify-end overflow-hidden rounded-2xl p-4 text-gray-100 shadow-md",
+                  "opacity-100",
+                  style.trilha_card
+                )}
+                style={{
+                  "--card-bg": `url('${item.backgroundImage}')`,
+                }}>
+                <h3 className="w-2/3 text-lg leading-6 font-semibold">{item.title}</h3>
               </motion.li>
             ))}
           </ul>

@@ -98,7 +98,7 @@ export default function ZoomedCard(props: ZoomedCardProps) {
           icon={props.isHintCard ? "HotelClass" : "Explore"}
           className="absolute -translate-x-1/2 text-amber-700 opacity-20"
         />
-        <h3 className="absolute bottom-8 left-8 w-2/3 text-start text-2xl font-semibold">
+        <h3 className="absolute bottom-8 left-8 w-2/3 text-start text-2xl leading-6 font-semibold">
           {props.cardContent}
         </h3>
       </motion.div>

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import SvgIcon from "../../Components/SvgIcon";
 import VirtualBackButton from "../../Components/VirtualBackButton";
 import { BOSS_NAME, KnowledgeTrail } from "../../Game/Data/data";
@@ -6,6 +6,10 @@ import { useWindowing, WindowKey } from "../../Lib/compass_navigator";
 import BattleView from "../battle_view";
 import CardLearningView from "../card_learning_view";
 import DocumentWhiteoutIntroductionView from "../qa_view";
+import useAlert from "../../Components/AlertDialog";
+import FeedbackForm from "../welcome/feedback_form";
+import delay from "../../Lib/delay";
+import { useGameState } from "../../Game/Data";
 
 interface TrailMenuViewProps {
   trail: KnowledgeTrail;
@@ -14,6 +18,25 @@ interface TrailMenuViewProps {
 export default function TrailMenuView(props: TrailMenuViewProps) {
   const windowing = useWindowing();
   const childWindowRef = useRef<WindowKey | null>(null);
+  const showAlert = useAlert();
+  const game = useGameState();
+
+  async function requestFeedback() {
+    if (game.data.userGaveFeedback) return;
+
+    await delay(1000);
+    const response = await showAlert({
+      title: "Feedback",
+      content: <p>Está gostando da plataforma? Por favor, nos diga o que você está achando.</p>,
+      buttons: { ok: "OK" },
+    });
+    const key = windowing.createWindow({
+      component: FeedbackForm,
+      props: { onSubmit: () => windowing.removeSpecificWindow(key) },
+      title: "Feedback Form View",
+      backButton: false,
+    });
+  }
 
   function onStudyClick() {
     if (childWindowRef.current) return;
@@ -36,7 +59,11 @@ export default function TrailMenuView(props: TrailMenuViewProps) {
     childWindowRef.current = windowing.createWindow({
       title: `Duel - ${props.trail.title} - ${BOSS_NAME}`,
       component: BattleView,
-      props: {},
+      props: {
+        onBattleDone: async () => {
+          requestFeedback();
+        },
+      },
       backButton: false,
     });
   }

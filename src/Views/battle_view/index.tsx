@@ -19,7 +19,9 @@ import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/cu
 import { useBackButtonHandler } from "../../Lib/back_button";
 import { SongName, useBackgroundSong } from "../../Lib/sound/song_provider";
 
-interface BattleViewProps {}
+interface BattleViewProps {
+  onBattleDone?: (playerWon: boolean) => void;
+}
 
 export default function BattleView(props: BattleViewProps) {
   const battle = useImperativeObject(() => new Battle());
@@ -117,6 +119,7 @@ export default function BattleView(props: BattleViewProps) {
           buttons: { ok: "OK" },
         });
         windowing.removeSpecificWindow(currentWindowKey);
+        props.onBattleDone?.(true);
       } else if (state instanceof GameOver) {
         setBackgroundSong(null);
         await showAlert({
@@ -125,6 +128,7 @@ export default function BattleView(props: BattleViewProps) {
           buttons: { ok: "OK" },
         });
         windowing.removeSpecificWindow(currentWindowKey);
+        props.onBattleDone?.(false);
       }
     });
   }, [battle.state]);

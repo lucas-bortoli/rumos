@@ -672,3 +672,43 @@ export const ACHIEVEMENTS: Archievement[] = [
     backgroundImage: AchievementImagePerfectionist,
   },
 ];
+
+import MarketplaceImageCreditoDiretoConsumidor from "./MarketplaceImages/CreditoDiretoConsumidor.png";
+import MarketplaceImageEletricista from "./MarketplaceImages/Eletricista.png";
+import MarketplaceImageEncanador from "./MarketplaceImages/Encanador.png";
+import MarketplaceImageFinanciamentoHabilitacao from "./MarketplaceImages/FinanciamentoHabilitacao.png";
+
+type MarketplaceItemId = string & { _tag?: "MarketplaceItemId" };
+
+interface MarketplaceItem {
+  id: MarketplaceItemId;
+  title: string;
+  backgroundImage: string;
+}
+
+export const MARKETPLACE_ITEMS: Record<string, MarketplaceItem[]> = {
+  "Serviços de Reparos Domésticos": [
+    {
+      id: "6c04bf7a-7733-43bd-a506-9f9e4117d21b",
+      title: "Encanador",
+      backgroundImage: MarketplaceImageEncanador,
+    },
+    {
+      id: "e4124c41-43b1-4188-91db-f79db32a28fe",
+      title: "Eletricista",
+      backgroundImage: MarketplaceImageEletricista,
+    },
+  ],
+  "Financiamento e Seguros": [
+    {
+      id: "f1625019-0b11-4a6b-8f41-2cdd59dc4d79",
+      title: "Financeiro de Habilitação (SFH)",
+      backgroundImage: MarketplaceImageFinanciamentoHabilitacao,
+    },
+    {
+      id: "0bd5567d-d71d-40a4-8235-b234c015843c",
+      title: "Crédito Direto ao Consumidor (CDC)",
+      backgroundImage: MarketplaceImageCreditoDiretoConsumidor,
+    },
+  ],
+};

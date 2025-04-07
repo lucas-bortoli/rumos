@@ -98,7 +98,9 @@ export default function CurvedCards(props: CurvedCardsProps) {
           transition={{ type: "spring", stiffness: 1500, damping: 30 }}
           className="relative mr-2 aspect-[3/4] h-full shrink-0 overflow-hidden rounded-lg bg-white p-4 text-gray-600 shadow-md"
           onClick={props.onCardClick.bind(null, card.key)}>
-          <h3 className="text-md absolute bottom-4 left-4 w-2/3 font-semibold">{card.title}</h3>
+          <h3 className="text-md absolute bottom-4 left-4 w-2/3 leading-6 font-semibold">
+            {card.title}
+          </h3>
         </motion.li>
       ))}
       <motion.li
@@ -107,7 +109,7 @@ export default function CurvedCards(props: CurvedCardsProps) {
         className="relative mr-2 aspect-[3/4] h-full shrink-0 overflow-hidden rounded-lg border-4 border-amber-300 bg-amber-100 p-4 text-amber-950 shadow-md"
         onClick={props.onCardClick.bind(null, "HintCard" satisfies HintCardKey)}>
         <SvgIcon icon="HotelClass" className="text-amber-300" />
-        <h3 className="text-md absolute bottom-4 left-4 w-2/3 font-semibold">Dica</h3>
+        <h3 className="text-md absolute bottom-4 left-4 w-2/3 leading-6 font-semibold">Dica</h3>
       </motion.li>
     </ul>
   );

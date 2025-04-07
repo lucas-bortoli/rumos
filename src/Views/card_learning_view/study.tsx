@@ -103,12 +103,12 @@ export default function CardStudyView(props: CardStudyViewProps) {
             flipCard={() => setCardMode((m) => (m === "Back" ? "Front" : "Back"))}
             nextCard={nextCard}
             front={
-              <h3 className="absolute bottom-8 left-8 w-2/3 text-start text-2xl font-semibold">
+              <h3 className="absolute bottom-8 left-8 w-2/3 text-start text-2xl leading-6 font-semibold">
                 {card.back}
               </h3>
             }
             back={
-              <h3 className="absolute bottom-8 left-8 w-2/3 text-start text-2xl font-semibold">
+              <h3 className="absolute bottom-8 left-8 w-2/3 text-start text-2xl leading-6 font-semibold">
                 {card.front}
               </h3>
             }

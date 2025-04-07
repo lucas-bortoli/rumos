@@ -26,7 +26,7 @@ export default function HomeView() {
 
   return (
     <motion.main
-      className="relative h-full w-full overflow-x-hidden overflow-y-scroll bg-white pb-20"
+      className="relative h-full w-full overflow-x-hidden overflow-y-scroll bg-white pb-40"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { duration: 0.3 } }}
       exit={{ opacity: 0 }}>
@@ -59,7 +59,7 @@ export default function HomeView() {
                       })
                     : trilhaNotAvailable()
                 }>
-                <h3 className="w-full text-lg font-semibold">{trail.title}</h3>
+                <h3 className="w-full text-lg leading-6 font-semibold">{trail.title}</h3>
               </motion.li>
             ))}
           </ul>

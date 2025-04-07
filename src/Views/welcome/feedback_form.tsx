@@ -6,6 +6,7 @@ import { MultilineTextField } from "../../Components/TextField";
 import { cn } from "../../Lib/class_names";
 import style from "./style.module.css";
 import { useTelemetry } from "../../Lib/telemetry";
+import { useGameState } from "../../Game/Data";
 
 export type Satisfaction =
   | "muito_satisfeito"
@@ -35,6 +36,7 @@ export default function FeedbackForm(props: FeedbackFormProps) {
 
   const showAlert = useAlert();
   const pushTelemetry = useTelemetry();
+  const game = useGameState();
 
   async function submitFeedback() {
     // Validation (add more as needed)
@@ -78,6 +80,8 @@ export default function FeedbackForm(props: FeedbackFormProps) {
         topicSuggestion,
       },
     });
+
+    game.dispatch({ kind: "SetUserGaveFeedbackSurvey", surveyGiven: true });
 
     await showAlert({
       title: "Obrigado!",

@@ -32,7 +32,7 @@ export default function QuestsView() {
                     "--card-bg": `url('${achievement.backgroundImage}')`,
                     backgroundPosition: "center",
                   }}>
-                  <h3 className="w-2/3 text-lg font-semibold">{achievement.title}</h3>
+                  <h3 className="w-2/3 text-lg leading-6 font-semibold">{achievement.title}</h3>
                 </div>
                 <SvgIcon
                   icon="Lock"

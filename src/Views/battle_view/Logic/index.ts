@@ -36,7 +36,7 @@ export class Battle implements ImperativeObject {
   playerName: string = "Player";
   playerHp: number = 3;
   playerHpMax: number = 3;
-  opponentName: string = "Archie2";
+  opponentName: string = "Archie";
   opponentHp: number = 3;
   opponentHpMax: number = 3;
 

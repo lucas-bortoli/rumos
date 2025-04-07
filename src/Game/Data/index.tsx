@@ -12,15 +12,20 @@ import { GameState, initialGameState } from "./state";
 import { loadFromLocalStorage, saveToLocalStorage } from "./storage";
 import { useTelemetry } from "../../Lib/telemetry";
 
-export type Action = {
-  kind: "SetUserInfo";
-  info: GameState["userInfo"];
-};
+export type Action =
+  | {
+      kind: "SetUserInfo";
+      info: GameState["userInfo"];
+    }
+  | { kind: "SetUserGaveFeedbackSurvey"; surveyGiven: boolean };
 
 function reducer(previous: GameState, action: Action): GameState {
   switch (action.kind) {
     case "SetUserInfo": {
       return { ...previous, userInfo: action.info };
+    }
+    case "SetUserGaveFeedbackSurvey": {
+      return { ...previous, userGaveFeedback: action.surveyGiven };
     }
   }
 
