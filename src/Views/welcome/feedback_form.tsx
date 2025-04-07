@@ -27,7 +27,7 @@ export default function FeedbackForm(props: FeedbackFormProps) {
   const [overallSatisfaction, setOverallSatisfaction] = useState<Satisfaction>("neutro");
   const [bugsEncountered, setBugsEncountered] = useState("");
   const [suggestions, setSuggestions] = useState("");
-  const [wouldRecommend, setWouldRecommend] = useState(false);
+  const [wouldRecommend, setWouldRecommend] = useState(true);
   const [topicSuggestion, setTopicSuggestion] = useState("");
 
   const [navigationIntuitive, setNavigationIntuitive] = useState<TriIntensity>("neutro");

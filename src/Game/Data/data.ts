@@ -702,7 +702,7 @@ export const MARKETPLACE_ITEMS: Record<string, MarketplaceItem[]> = {
   "Financiamento e Seguros": [
     {
       id: "f1625019-0b11-4a6b-8f41-2cdd59dc4d79",
-      title: "Financeiro de Habilitação (SFH)",
+      title: "Financiamento pelo Sistema Financeiro de Habitação (SFH)",
       backgroundImage: MarketplaceImageFinanciamentoHabilitacao,
     },
     {

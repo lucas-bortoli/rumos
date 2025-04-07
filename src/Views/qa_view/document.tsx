@@ -248,7 +248,7 @@ export default function DocumentWhiteoutView() {
     }, 300);
   });
 
-  const [footerExpanded, setFooterExpanded] = useState(false);
+  const [footerExpanded, setFooterExpanded] = useState(true);
 
   return (
     <main className="flex h-full w-full flex-col overflow-hidden bg-white">
