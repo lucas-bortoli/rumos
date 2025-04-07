@@ -6,10 +6,13 @@ import { cn } from "../../Lib/class_names";
 import { useWindowing } from "../../Lib/compass_navigator";
 import style from "./style.module.css";
 import TrailMenuView from "../trail_menu_view";
+import { useBackgroundSong } from "../../Lib/sound/song_provider";
 
 export default function HomeView() {
   const windowing = useWindowing();
   const showAlert = useAlert();
+
+  useBackgroundSong({ name: "MusLobby" });
 
   function trilhaNotAvailable() {
     showAlert({

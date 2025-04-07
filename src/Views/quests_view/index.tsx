@@ -21,16 +21,24 @@ export default function QuestsView() {
         <ul className="flex h-60 w-full overflow-x-scroll py-2 before:mr-4 after:ml-4">
           {ACHIEVEMENTS.map((achievement) => {
             return (
-              <motion.li
-                key={achievement.id}
-                whileTap={{ scale: 1.05 }}
-                className={cn(
-                  "mr-2 flex aspect-[3/4] h-full shrink-0 flex-col justify-end overflow-hidden rounded-2xl p-4 text-gray-100 shadow-md",
-                  "opacity-20",
-                  style.trilha_card
-                )}>
-                <h3 className="w-2/3 text-lg font-semibold">{achievement.title}</h3>
-              </motion.li>
+              <li key={achievement.id} className={cn("relative mr-2")}>
+                <div
+                  className={cn(
+                    "flex aspect-[3/4] h-full shrink-0 flex-col justify-end overflow-hidden rounded-2xl p-4 text-gray-100 shadow-md",
+                    "opacity-20",
+                    style.trilha_card
+                  )}
+                  style={{
+                    "--card-bg": `url('${achievement.backgroundImage}')`,
+                    backgroundPosition: "center",
+                  }}>
+                  <h3 className="w-2/3 text-lg font-semibold">{achievement.title}</h3>
+                </div>
+                <SvgIcon
+                  icon="Lock"
+                  className="absolute top-1/2 left-1/2 !h-10 -translate-x-1/2 -translate-y-1/2 text-amber-800"
+                />
+              </li>
             );
           })}
         </ul>

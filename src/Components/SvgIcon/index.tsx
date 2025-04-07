@@ -11,6 +11,9 @@ import IconArrowBack from "./ArrowBack.svg?react";
 import IconKeyboardArrowUp from "./KeyboardArrowUp.svg?react";
 import IconKeyboardArrowDown from "./KeyboardArrowDown.svg?react";
 import IconInventory from "./Inventory.svg?react";
+import IconStorefront from "./Storefront.svg?react";
+import IconForYou from "./ForYou.svg?react";
+import IconLock from "./Lock.svg?react";
 
 const Icons = {
   Explore: IconExplore,
@@ -24,6 +27,9 @@ const Icons = {
   KeyboardArrowUp: IconKeyboardArrowUp,
   KeyboardArrowDown: IconKeyboardArrowDown,
   Inventory: IconInventory,
+  Storefront: IconStorefront,
+  ForYou: IconForYou,
+  Lock: IconLock,
 } as const;
 
 export type SvgIconName = keyof typeof Icons;

@@ -1,6 +1,8 @@
 import MusShop from "./mus_shop.mp3";
 import MusSuspense from "./mus_suspense.mp3";
 import MusBattleVictory from "./mus_battle_victory.mp3";
+import MusLobby from "./mus_lobby.mp3";
+import MusBattle from "./mus_battle.mp3";
 import {
   createContext,
   Dispatch,
@@ -46,6 +48,8 @@ export const Songs = {
   MusSuspense: MusSuspense,
   MusShop: MusShop,
   MusBattleVictory,
+  MusLobby,
+  MusBattle,
 } as const;
 
 export type SongName = keyof typeof Songs;

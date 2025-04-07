@@ -56,8 +56,8 @@ export default function NavigationBarBottom(props: NavigationBarBottomProps) {
       <div className="text-grey-400 flex h-12 w-full items-center justify-between">
         {(
           [
-            ["Marketplace", "Explore"],
-            ["Home", "AccountCircle"],
+            ["Marketplace", "Storefront"],
+            ["Home", "ForYou"],
             ["Quests", "HotelClass"],
           ] satisfies [Screen, SvgIconName][]
         ).map(([screen, icon]) => {

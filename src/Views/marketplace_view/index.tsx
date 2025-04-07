@@ -18,7 +18,7 @@ export default function MarketplaceView() {
       <nav className="border-grey-200 sticky top-0 z-10 mt-8 mb-4 flex items-center gap-2 border-b bg-white p-4 pb-3">
         <h1 className="text-xl">Marketplace</h1>
       </nav>
-      <section className="px-4">Essa é a marketplace.</section>
+      <section className="px-4">Essa é a marketplace. Aqui, nossos parceiros.</section>
       {[0, 1, 3].map((categoria) => (
         <section className="flex flex-col pt-2" key={categoria}>
           <h2 className="px-4 text-xl">Quadros</h2>

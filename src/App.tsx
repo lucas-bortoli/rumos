@@ -3,6 +3,7 @@ import { useGameState } from "./Game/Data";
 import { useWindowing } from "./Lib/compass_navigator";
 import { useTelemetry } from "./Lib/telemetry";
 import WelcomeView from "./Views/welcome";
+import FeedbackForm from "./Views/welcome/feedback_form";
 
 export default function App() {
   const windowing = useWindowing();

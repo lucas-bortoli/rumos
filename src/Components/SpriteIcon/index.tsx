@@ -11,6 +11,7 @@ import IconUndo16 from "./Undo16.png";
 import IconSave16 from "./Save16.png";
 import IconCheck16 from "./Check16.png";
 import IconDropdownArrow16 from "./DropdownArrow16.png";
+import IconRadioButtonFilled16 from "./RadioButtonFilled16.png";
 import { CSSProperties } from "react";
 
 const Icons = {
@@ -26,6 +27,7 @@ const Icons = {
   Save16: [IconSave16, 16],
   Check16: [IconCheck16, 16],
   DropdownArrow16: [IconDropdownArrow16, 16],
+  RadioButtonFilled16: [IconRadioButtonFilled16, 16],
 } as const;
 
 export type IconName = keyof typeof Icons;

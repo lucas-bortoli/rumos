@@ -82,7 +82,7 @@ export default function useAlert() {
 
     const createdWindow = windowing.createWindow<AlertDialogProps<ActionKeys>>({
       component: AlertDialog,
-      title: "Alert Dialog",
+      title: `Alert Dialog: ${config.title}`,
       props: {
         title: config.title,
         buttons: config.buttons,

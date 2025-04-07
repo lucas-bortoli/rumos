@@ -81,7 +81,7 @@ export const KNOWLEDGE_TRAILS: KnowledgeTrail[] = [
   {
     id: "174d5105-b07d-46d6-81ed-fba8c67be205",
     categoryId: KnowledgeTrailCategoryLivingAloneWhatNow.id,
-    title: "Documentação",
+    title: "Documentação Geral",
     backgroundImage: img2,
     isEnabled: false,
   },
@@ -631,32 +631,44 @@ export interface Archievement {
   id: ArchievementId;
   title: string;
   content: string;
+  backgroundImage: string;
 }
+
+import AchievementImageCombinationMaster from "./AchievementImages/CombinationMaster.png";
+import AchievementImageContractCollector from "./AchievementImages/ContractCollector.png";
+import AchievementImageNoWorries from "./AchievementImages/NoWorries.png";
+import AchievementImagePerfectionist from "./AchievementImages/Perfectionist.png";
+import AchievementImageWarrior from "./AchievementImages/Warrior.png";
 
 export const ACHIEVEMENTS: Archievement[] = [
   {
     id: "e97b5353-d725-434e-a90f-1a2788ae9840",
     title: "Não tem problema!",
     content: "Errou o termo e tentou de novo.",
+    backgroundImage: AchievementImageNoWorries,
   },
   {
     id: "1cb62bc1-032f-4fd2-92ee-ee470278a0ce",
     title: "Guerreiro Inabalável",
     content: "Derrote o chefe com apenas 1 ponto de vida restante.",
+    backgroundImage: AchievementImageWarrior,
   },
   {
     id: "d5593e2a-b556-4a5d-a0eb-d44b813a5c72",
     title: "Mestre das Combinações",
     content: "Realize um combo de 5 ataques.",
+    backgroundImage: AchievementImageCombinationMaster,
   },
   {
     id: "e3593e2a-b556-4a5d-a1e1-d44b81725c72",
     title: "Colecionador de Contratos",
     content: "Conclua um contrato sem perder vida e obtenha um item bônus.",
+    backgroundImage: AchievementImageContractCollector,
   },
   {
     id: "831b5d7c-e437-4183-8faf-14d65e7996e6",
     title: "Perfeccionista dos Contratos",
     content: "Conclua o contrato com 100% de precisão e receba uma recompensa exclusiva.",
+    backgroundImage: AchievementImagePerfectionist,
   },
 ];

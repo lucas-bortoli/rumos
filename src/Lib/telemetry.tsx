@@ -11,6 +11,7 @@ import { TELEMETRY_CLIENT_KEY, TELEMETRY_ENDPOINT } from "../Game/Data/data";
 import { persistentSequence, type Sequence } from "./sequence_generator";
 import generateUUID from "./uuid";
 import type { Action as GameStateDispatchAction } from "../Game/Data";
+import type * as FeedbackSurvey from "../Views/welcome/feedback_form";
 
 export type TelemetryAction =
   | {
@@ -19,7 +20,20 @@ export type TelemetryAction =
         title: string;
       } | null;
     }
-  | { kind: "GameStateDispatchAction"; action: GameStateDispatchAction };
+  | { kind: "GameStateDispatchAction"; action: GameStateDispatchAction }
+  | {
+      kind: "FeedbackSurvey";
+      survey: {
+        overallSatisfaction: FeedbackSurvey.Satisfaction;
+        bugsEncountered: string;
+        suggestions: string;
+        wouldRecommend: boolean;
+        navigationIntuitive: FeedbackSurvey.TriIntensity;
+        navigationDifficulty: string;
+        termsClear: FeedbackSurvey.TriIntensity;
+        topicSuggestion: string;
+      };
+    };
 
 export interface Frame {
   /**
