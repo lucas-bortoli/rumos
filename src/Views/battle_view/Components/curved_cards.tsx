@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Key, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { cn } from "../../../Lib/class_names";
 import SvgIcon from "../../../Components/SvgIcon";
+import useMouseHorizontalPanScroll from "../../../Lib/mouse_scroll_panning/use_mouse_horizontal_pan_scroll";
 
 type HintCardKey = "HintCard" & { _tag?: "HintCardKey" };
 
@@ -19,6 +20,8 @@ interface CurvedCardsProps {
 export default function CurvedCards(props: CurvedCardsProps) {
   const containerRef = useRef<HTMLUListElement>(null);
   const [cardTranslations, setCardTranslations] = useState<number[]>([]);
+
+  useMouseHorizontalPanScroll(containerRef);
 
   // Update translations based on horizontal position
   const updateTranslations = useCallback(() => {

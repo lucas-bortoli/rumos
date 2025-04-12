@@ -5,6 +5,8 @@ import { useWindowing } from "../../Lib/compass_navigator";
 import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
 import style from "./style.module.css";
 import { RegisterWindow } from "./_windows";
+import { useRef } from "react";
+import useMouseVerticalPanScroll from "../../Lib/mouse_scroll_panning/use_mouse_vertical_pan_scroll";
 
 export default function Welcome() {
   const windowing = useWindowing();
@@ -15,8 +17,12 @@ export default function Welcome() {
     windowing.removeWindow(currentWindowKey);
   }
 
+  const mainRef = useRef<HTMLDivElement | null>(null);
+  useMouseVerticalPanScroll(mainRef);
+
   return (
     <motion.div
+      ref={mainRef}
       className={cn(
         "relative mx-auto flex h-full w-full max-w-[768px] flex-col items-stretch gap-4 overflow-y-scroll p-8",
         style.container

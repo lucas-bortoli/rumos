@@ -1,13 +1,20 @@
 import { motion } from "framer-motion";
+import { useRef } from "react";
 import NavigationBarBottom from "../../../Components/NavigationBarBottom";
 import SvgIcon from "../../../Components/SvgIcon";
 import { ACHIEVEMENTS } from "../../../Game/Data/data";
 import { cn } from "../../../Lib/class_names";
+import useMouseVerticalPanScroll from "../../../Lib/mouse_scroll_panning/use_mouse_vertical_pan_scroll";
+import HorizontalList from "../Components/HorizontalList";
 import style from "./style.module.css";
 
 export default function Quests() {
+  const mainRef = useRef<HTMLElement | null>(null);
+  useMouseVerticalPanScroll(mainRef);
+
   return (
     <motion.main
+      ref={mainRef}
       className="relative h-full w-full overflow-x-hidden overflow-y-scroll bg-white pb-40"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { duration: 0.3 } }}
@@ -18,7 +25,7 @@ export default function Quests() {
       <section className="px-4">Aqui você pode ver suas conquistas e desafios.</section>
       <section className="flex flex-col pt-2">
         <h2 className="px-4 text-xl">Minhas Conquistas</h2>
-        <ul className="flex h-60 w-full overflow-x-scroll py-2 before:mr-4 after:ml-4">
+        <HorizontalList className="h-60 py-2">
           {ACHIEVEMENTS.map((achievement) => {
             return (
               <li key={achievement.id} className={cn("relative mr-2")}>
@@ -41,7 +48,7 @@ export default function Quests() {
               </li>
             );
           })}
-        </ul>
+        </HorizontalList>
       </section>
       <section className="flex flex-col pt-2">
         <header className="flex items-center gap-2 px-4">

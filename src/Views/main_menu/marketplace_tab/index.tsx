@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
+import { useRef } from "react";
 import NavigationBarBottom from "../../../Components/NavigationBarBottom";
 import { MARKETPLACE_ITEMS } from "../../../Game/Data/data";
 import { cn } from "../../../Lib/class_names";
 import { useBackgroundSong } from "../../../Lib/sound/song_provider";
+import useMouseVerticalPanScroll from "../../../Lib/mouse_scroll_panning/use_mouse_vertical_pan_scroll";
+import HorizontalList from "../Components/HorizontalList";
 import style from "./style.module.css";
 
 export default function Marketplace() {
@@ -11,8 +14,12 @@ export default function Marketplace() {
     volume: 0.5,
   });
 
+  const mainRef = useRef<HTMLElement | null>(null);
+  useMouseVerticalPanScroll(mainRef);
+
   return (
     <motion.main
+      ref={mainRef}
       className="relative h-full w-full overflow-x-hidden overflow-y-scroll bg-white pb-40"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { duration: 0.3 } }}
@@ -34,7 +41,7 @@ export default function Marketplace() {
       {Object.entries(MARKETPLACE_ITEMS).map(([categoria, items]) => (
         <section className="flex flex-col pt-2" key={categoria}>
           <h2 className="px-4 text-xl">{categoria}</h2>
-          <ul className="flex h-60 w-full overflow-x-scroll py-2 before:mr-4 after:ml-4">
+          <HorizontalList className="h-60 py-2">
             {items.map((item) => (
               <motion.li
                 key={item.id}
@@ -50,7 +57,7 @@ export default function Marketplace() {
                 <h3 className="w-2/3 text-lg leading-6 font-semibold">{item.title}</h3>
               </motion.li>
             ))}
-          </ul>
+          </HorizontalList>
         </section>
       ))}
       <NavigationBarBottom currentScreen="Marketplace" />

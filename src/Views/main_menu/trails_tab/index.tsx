@@ -1,11 +1,14 @@
 import { motion } from "framer-motion";
+import { useRef } from "react";
 import useAlert from "../../../Components/AlertDialog";
 import NavigationBarBottom from "../../../Components/NavigationBarBottom";
 import { KNOWLEDGE_TRAIL_CATEGORIES, KNOWLEDGE_TRAILS } from "../../../Game/Data/data";
 import { cn } from "../../../Lib/class_names";
 import { useWindowing } from "../../../Lib/compass_navigator";
 import { useBackgroundSong } from "../../../Lib/sound/song_provider";
+import useMouseVerticalPanScroll from "../../../Lib/mouse_scroll_panning/use_mouse_vertical_pan_scroll";
 import { TrailMenuWindow } from "../../trail_menu_view/_windows";
+import HorizontalList from "../Components/HorizontalList";
 import style from "./style.module.css";
 
 export default function Home() {
@@ -24,8 +27,12 @@ export default function Home() {
     });
   }
 
+  const mainRef = useRef<HTMLElement | null>(null);
+  useMouseVerticalPanScroll(mainRef);
+
   return (
     <motion.main
+      ref={mainRef}
       className="relative h-full w-full overflow-x-hidden overflow-y-scroll bg-white pb-40"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { duration: 0.3 } }}
@@ -39,7 +46,7 @@ export default function Home() {
       {KNOWLEDGE_TRAIL_CATEGORIES.map((category) => (
         <section className="flex flex-col pt-2" key={category.id}>
           <h2 className="px-4 text-xl">{category.title}</h2>
-          <ul className="flex h-60 w-full overflow-x-scroll py-2 before:mr-4 after:ml-4">
+          <HorizontalList className="h-60 py-2">
             {KNOWLEDGE_TRAILS.filter((t) => t.categoryId === category.id).map((trail) => (
               <motion.li
                 key={trail.id}
@@ -58,7 +65,7 @@ export default function Home() {
                 <h3 className="w-full text-lg leading-6 font-semibold">{trail.title}</h3>
               </motion.li>
             ))}
-          </ul>
+          </HorizontalList>
         </section>
       ))}
       <NavigationBarBottom currentScreen="Home" />

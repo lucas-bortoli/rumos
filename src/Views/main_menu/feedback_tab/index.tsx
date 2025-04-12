@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
+import { useRef } from "react";
 import Button from "../../../Components/Button";
 import NavigationBarBottom from "../../../Components/NavigationBarBottom";
 import { useWindowing } from "../../../Lib/compass_navigator";
+import useMouseVerticalPanScroll from "../../../Lib/mouse_scroll_panning/use_mouse_vertical_pan_scroll";
 import { FeedbackFormWindow } from "../../welcome/_windows";
 
 export default function FeedbackTab() {
@@ -13,8 +15,12 @@ export default function FeedbackTab() {
     });
   }
 
+  const mainRef = useRef<HTMLElement | null>(null);
+  useMouseVerticalPanScroll(mainRef);
+
   return (
     <motion.main
+      ref={mainRef}
       className="relative h-full w-full overflow-x-hidden overflow-y-scroll bg-white pb-40"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { duration: 0.3 } }}

@@ -6,11 +6,10 @@ import { useGameState } from "../../Game/Data";
 import { BOSS_NAME, KnowledgeTrail } from "../../Game/Data/data";
 import { useWindowing, WindowKey } from "../../Lib/compass_navigator";
 import delay from "../../Lib/delay";
-import BattleView from "../battle_view";
+import { BattleContainerWindow } from "../battle_view/_windows";
 import { CardLearningIntroWindow } from "../card_learning_view/_windows";
 import { DocumentWhiteoutIntroWindow } from "../qa_view/_windows";
 import { FeedbackFormWindow } from "../welcome/_windows";
-import { BattleContainerWindow } from "../battle_view/_windows";
 
 interface TrailMenuProps {
   trail: KnowledgeTrail;

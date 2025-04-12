@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "../../Components/Button";
 import TextField from "../../Components/TextField";
 import ComboBox from "../../Components/ComboBox";
@@ -10,6 +10,7 @@ import useAlert from "../../Components/AlertDialog";
 import { useGameState } from "../../Game/Data";
 import { useWindowing } from "../../Lib/compass_navigator";
 import { HomeWindow } from "../main_menu/_windows";
+import useMouseVerticalPanScroll from "../../Lib/mouse_scroll_panning/use_mouse_vertical_pan_scroll";
 
 // Função auxiliar para validar o formato do e-mail
 function isValidEmail(email: string): boolean {
@@ -107,8 +108,12 @@ export default function RegisterForm() {
     }
   }, [game.data]);
 
+  const mainRef = useRef<HTMLDivElement | null>(null);
+  useMouseVerticalPanScroll(mainRef);
+
   return (
     <div
+      ref={mainRef}
       className={cn(
         "relative mx-auto flex h-full w-full max-w-[768px] flex-col items-stretch gap-4 overflow-y-scroll p-8",
         style.container

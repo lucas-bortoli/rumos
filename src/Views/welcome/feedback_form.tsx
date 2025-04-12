@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import useAlert from "../../Components/AlertDialog";
 import Button from "../../Components/Button";
 import RadioButton from "../../Components/RadioButton";
@@ -7,6 +7,7 @@ import { cn } from "../../Lib/class_names";
 import style from "./style.module.css";
 import { useTelemetry } from "../../Lib/telemetry";
 import { useGameState } from "../../Game/Data";
+import useMouseVerticalPanScroll from "../../Lib/mouse_scroll_panning/use_mouse_vertical_pan_scroll";
 
 export type Satisfaction =
   | "muito_satisfeito"
@@ -92,8 +93,12 @@ export default function FeedbackForm(props: FeedbackFormProps) {
     props.onSubmit();
   }
 
+  const mainRef = useRef<HTMLDivElement | null>(null);
+  useMouseVerticalPanScroll(mainRef);
+
   return (
     <div
+      ref={mainRef}
       className={cn(
         "relative mx-auto flex h-full w-full max-w-[768px] flex-col items-stretch gap-4 overflow-y-scroll p-8",
         style.container
