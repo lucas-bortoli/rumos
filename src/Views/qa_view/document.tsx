@@ -2,7 +2,7 @@ import { motion, Variant } from "framer-motion";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import DocumentArticle from "../../Components/DocumentArticle";
 import Frame from "../../Components/Frame";
-import { DOCUMENT_CONTRACT_HTML } from "../../Game/Data/data";
+import { DOCUMENT_CONTRACT_HTML, KnowledgeTrail } from "../../Game/Data/data";
 import { cn } from "../../Lib/class_names";
 import { addListener, removeListener } from "../../Lib/event_manager";
 import findElementInParents from "../../Lib/find_element_in_parents";
@@ -66,7 +66,11 @@ function censor(text: string) {
   return text; //text.replace(/[^\wç]/gi, " ").replace(/[\wç]/gi, ".");
 }
 
-export default function DocumentWhiteoutView() {
+interface DocumentWhiteoutProps {
+  trail: KnowledgeTrail;
+}
+
+export default function DocumentWhiteout(props: DocumentWhiteoutProps) {
   const [choices, setChoices] = useMap<ChoiceId, Choice>([]);
   const [whiteouts, setWhiteouts] = useMap<WhiteoutId, Whiteout>([]);
   const [choiceToWhiteout, setChoiceToWhiteout] = useMap<ChoiceId, WhiteoutId>([]);
@@ -244,7 +248,7 @@ export default function DocumentWhiteoutView() {
     });
     if (choice === "cancel") return;
     setTimeout(() => {
-      windowing.removeSpecificWindow(currentWindowKey);
+      windowing.removeWindow(currentWindowKey);
     }, 300);
   });
 

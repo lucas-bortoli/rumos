@@ -4,11 +4,11 @@ import NavigationBarBottom from "../../Components/NavigationBarBottom";
 import { KNOWLEDGE_TRAIL_CATEGORIES, KNOWLEDGE_TRAILS } from "../../Game/Data/data";
 import { cn } from "../../Lib/class_names";
 import { useWindowing } from "../../Lib/compass_navigator";
-import style from "./style.module.css";
-import TrailMenuView from "../trail_menu_view";
 import { useBackgroundSong } from "../../Lib/sound/song_provider";
+import { TrailMenuWindow } from "../trail_menu_view/_windows";
+import style from "./style.module.css";
 
-export default function HomeView() {
+export default function Home() {
   const windowing = useWindowing();
   const showAlert = useAlert();
 
@@ -52,11 +52,7 @@ export default function HomeView() {
                 style={{ "--card-bg": `url('${trail.backgroundImage}')` }}
                 onClick={() =>
                   trail.isEnabled
-                    ? windowing.createWindow({
-                        component: TrailMenuView,
-                        props: { trail },
-                        title: "Trail Menu",
-                      })
+                    ? windowing.createWindow(TrailMenuWindow, { trail })
                     : trilhaNotAvailable()
                 }>
                 <h3 className="w-full text-lg leading-6 font-semibold">{trail.title}</h3>

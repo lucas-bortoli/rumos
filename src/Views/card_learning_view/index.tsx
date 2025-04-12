@@ -3,24 +3,20 @@ import VirtualBackButton from "../../Components/VirtualBackButton";
 import { KnowledgeTrail } from "../../Game/Data/data";
 import { useWindowing } from "../../Lib/compass_navigator";
 import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
-import CardStudyView from "./study";
+import { CardLearningWindow } from "./_windows";
 import Img1 from "./trilha02.png";
 
-interface CardLearningViewProps {
+interface CardLearningIntroProps {
   trail: KnowledgeTrail;
 }
 
-export default function CardLearningView(props: CardLearningViewProps) {
+export default function CardLearningIntro(props: CardLearningIntroProps) {
   const windowing = useWindowing();
   const currentWindowKey = useCurrentWindowKey();
 
   function start() {
-    windowing.createWindow({
-      title: `Card Study - Inner`,
-      component: CardStudyView,
-      props: { trail: props.trail },
-    });
-    windowing.removeSpecificWindow(currentWindowKey);
+    windowing.createWindow(CardLearningWindow, { trail: props.trail });
+    windowing.removeWindow(currentWindowKey);
   }
 
   return (

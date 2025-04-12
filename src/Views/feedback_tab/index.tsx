@@ -2,17 +2,14 @@ import { motion } from "framer-motion";
 import Button from "../../Components/Button";
 import NavigationBarBottom from "../../Components/NavigationBarBottom";
 import { useWindowing } from "../../Lib/compass_navigator";
-import FeedbackForm from "../welcome/feedback_form";
+import { FeedbackFormWindow } from "../welcome/_windows";
 
-export default function FeedbackTabView() {
+export default function FeedbackTab() {
   const windowing = useWindowing();
 
   async function requestFeedback() {
-    const key = windowing.createWindow({
-      component: FeedbackForm,
-      props: { onSubmit: () => windowing.removeSpecificWindow(key) },
-      title: "Feedback Form View",
-      backButton: false,
+    const feedbackWindowKey = windowing.createWindow(FeedbackFormWindow, {
+      onSubmit: () => windowing.removeWindow(feedbackWindowKey),
     });
   }
 

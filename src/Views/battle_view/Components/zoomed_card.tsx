@@ -2,10 +2,10 @@ import { motion, Variant } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { useWindowing } from "../../../Lib/compass_navigator";
 import useCurrentWindowKey from "../../../Lib/compass_navigator/window_container/current_window_key_context";
-import useCurrentWindowBackButton from "../../../Lib/compass_navigator/window_container/use_current_window_back_button";
 import { cn } from "../../../Lib/class_names";
 import SvgIcon from "../../../Components/SvgIcon";
 import { useSwipe } from "../../../Lib/use_swipe";
+import useProvideCurrentWindow from "../../../Lib/compass_navigator/window_container/use_provide_current_window";
 
 const variants = {
   enter: {
@@ -47,16 +47,18 @@ export default function ZoomedCard(props: ZoomedCardProps) {
   const windowing = useWindowing();
 
   function submit() {
-    windowing.removeSpecificWindow(currentWindowKey);
+    windowing.removeWindow(currentWindowKey);
     props.onSubmit?.();
   }
 
   function cancel() {
-    windowing.removeSpecificWindow(currentWindowKey);
+    windowing.removeWindow(currentWindowKey);
     props.onCancel?.();
   }
 
-  useCurrentWindowBackButton(cancel);
+  useProvideCurrentWindow({
+    backButtonHandler: () => cancel(),
+  });
 
   useSwipe({
     target: cardRef,

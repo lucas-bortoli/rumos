@@ -5,7 +5,7 @@ import { useBackgroundSong } from "../../Lib/sound/song_provider";
 import { MARKETPLACE_ITEMS } from "../../Game/Data/data";
 import style from "./style.module.css";
 
-export default function MarketplaceView() {
+export default function Marketplace() {
   useBackgroundSong({
     name: "MusShop",
     volume: 0.5,

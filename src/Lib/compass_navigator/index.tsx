@@ -4,6 +4,7 @@ import {
   Dispatch,
   PropsWithChildren,
   ReactNode,
+  RefObject,
   useContext,
   useMemo,
   useReducer,
@@ -15,14 +16,21 @@ import WindowContainer from "./window_container";
 export type WindowKey = Sequence;
 const makeWindowKey = sequence();
 
+export type BackButtonHandler = (removeWindow: () => void) => void;
+
+type Component = (props: any) => ReactNode;
+type PropsOf<C extends Component> = Parameters<C>[0] extends undefined ? {} : Parameters<C>[0];
+
 export interface Window<P> {
   key: WindowKey;
-  title: string;
-  noAnimation: boolean;
-  backButton: boolean;
-  component: (props: P) => ReactNode;
+  manifest: Manifest<P>;
+  component: Component;
   props: P;
+  title: string | null;
+  backButtonHandler: RefObject<BackButtonHandler | null> | null;
 }
+
+type WindowUpdater = Pick<Partial<Window<any>>, "title" | "backButtonHandler">;
 
 interface State {
   windows: Window<any>[];
@@ -31,7 +39,11 @@ interface State {
 type Action =
   | { kind: "WmCreateWindow"; window: Window<any> }
   | { kind: "WmRemoveWindow"; key: WindowKey }
-  | { kind: "WmUpdateWindow"; key: WindowKey; updates: Omit<Partial<Window<any>>, "key"> };
+  | {
+      kind: "WmUpdateWindow";
+      key: WindowKey;
+      updates: WindowUpdater;
+    };
 
 function reducer(state: State, action: Action): State {
   const getWindow = (key: WindowKey) => {
@@ -76,8 +88,17 @@ export function WindowManagerProvider(props: PropsWithChildren) {
 
   useBackButtonHandler(() => {
     const topmostWindow = state.windows.at(-1);
-    if (topmostWindow && state.windows.length > 1 && topmostWindow.backButton) {
-      dispatch({ kind: "WmRemoveWindow", key: topmostWindow.key });
+    if (topmostWindow && state.windows.length >= 2) {
+      const handler = topmostWindow.backButtonHandler?.current;
+      const removeWindow = dispatch.bind(null, { kind: "WmRemoveWindow", key: topmostWindow.key });
+
+      if (handler) {
+        // window-defined route handler
+        handler(removeWindow);
+      } else {
+        // default handler: kill window
+        removeWindow();
+      }
     }
   });
 
@@ -91,7 +112,7 @@ export function WindowsOutlet() {
   const windows = state.windows.slice().toSorted((a, b) => a.key - b.key);
 
   return (
-    <div className="relative z-0 h-[100lvh] w-[100lvw] overflow-hidden">
+    <div data-windows-outlet="" className="relative z-0 h-full w-full overflow-hidden">
       <AnimatePresence>
         {windows.map((window, index) => {
           return <WindowContainer key={window.key} window={window} zIndex={index} />;
@@ -108,20 +129,14 @@ export function useWindowing() {
   const wm = useContext(context);
 
   return useMemo(() => {
-    function createWindow<P extends object>(options: {
-      component: (props: P) => ReactNode | null;
-      props: P;
-      title: string;
-      noAnimation?: boolean;
-      backButton?: boolean;
-    }) {
+    function createWindow<P>(manifest: Manifest<P>, props: P) {
       const window = {
         key: makeWindowKey(),
-        title: options.title,
-        component: options.component,
-        props: options.props,
-        noAnimation: options.noAnimation ?? false,
-        backButton: options.backButton ?? true,
+        manifest,
+        component: manifest.component,
+        props: props,
+        title: manifest.initialTitle(props),
+        backButtonHandler: null,
       } satisfies Window<P>;
 
       wm.dispatch({ kind: "WmCreateWindow", window });
@@ -129,14 +144,35 @@ export function useWindowing() {
       return window.key;
     }
 
-    function removeSpecificWindow(key: WindowKey) {
+    function updateWindow(key: WindowKey, updates: WindowUpdater) {
+      wm.dispatch({ kind: "WmUpdateWindow", key, updates });
+    }
+
+    function removeWindow(key: WindowKey) {
       wm.dispatch({ kind: "WmRemoveWindow", key });
     }
 
     return {
       windows: wm.state.windows as ReadonlyArray<Window<any>>,
       createWindow,
-      removeSpecificWindow,
+      updateWindow,
+      removeWindow,
     };
   }, [wm.state]);
+}
+
+export interface Manifest<P> {
+  component: Component;
+  initialTitle: (props: P) => string;
+  hasAnimation: boolean;
+}
+
+export function manifest<C extends Component>(
+  component: C,
+  options: Omit<Manifest<PropsOf<C>>, "component">
+) {
+  return {
+    component,
+    ...options,
+  } satisfies Manifest<PropsOf<C>>;
 }

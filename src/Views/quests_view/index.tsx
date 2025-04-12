@@ -5,7 +5,7 @@ import { ACHIEVEMENTS } from "../../Game/Data/data";
 import style from "./style.module.css";
 import SvgIcon from "../../Components/SvgIcon";
 
-export default function QuestsView() {
+export default function Quests() {
   return (
     <motion.main
       className="relative h-full w-full overflow-x-hidden overflow-y-scroll bg-white pb-40"

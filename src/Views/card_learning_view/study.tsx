@@ -1,20 +1,17 @@
-import { Variant } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import VirtualBackButton from "../../Components/VirtualBackButton";
 import { KnowledgeTrail } from "../../Game/Data/data";
-import Card from "./Components/Card";
-import SwipeLeftHint from "./Components/SwipeLeftHint";
-import TapHint from "./Components/TapHint";
-import useCardFeed from "./Hooks/use_card_feed";
+import { addListener, removeListener } from "../../Lib/event_manager";
 import useSound from "../../Lib/sound";
 import useUpdateEffect from "../../Lib/use_update_effect";
-import { addListener, removeListener } from "../../Lib/event_manager";
+import Card from "./Components/Card";
+import useCardFeed from "./Hooks/use_card_feed";
 
-interface CardStudyViewProps {
-  trail: KnowledgeTrail | null;
+interface CardLearningProps {
+  trail: KnowledgeTrail;
 }
 
-export default function CardStudyView(props: CardStudyViewProps) {
+export default function CardLearning(props: CardLearningProps) {
   const [cardHistory, currentCardIndex, goBack, goForward] = useCardFeed();
   const currentCard = cardHistory[currentCardIndex];
 

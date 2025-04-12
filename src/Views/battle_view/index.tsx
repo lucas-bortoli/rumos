@@ -18,12 +18,13 @@ import ZoomedCard from "./Components/zoomed_card";
 import useScrollingText from "./Hooks/use_scrolling_text";
 import { Battle, GameOver, UserTurn, Victory } from "./Logic";
 import style from "./style.module.css";
+import { ZoomedCardWindow } from "./_windows";
 
-interface BattleViewProps {
+interface BattleContainerProps {
   onBattleDone?: (playerWon: boolean) => void;
 }
 
-export default function BattleView(props: BattleViewProps) {
+export default function BattleContainer(props: BattleContainerProps) {
   const battle = useImperativeObject(() => new Battle());
   const windowing = useWindowing();
   const currentWindowKey = useCurrentWindowKey();
@@ -53,36 +54,24 @@ export default function BattleView(props: BattleViewProps) {
 
     if (isHintCard) {
       playCard1Sound();
-      windowing.createWindow({
-        title: "Zoomed Hint Card",
-        component: ZoomedCard,
-        props: {
-          cardContent: currentState.question.tip,
-          isHintCard: true,
-          onSubmit: playCard2Sound,
-          onCancel: playCard2Sound,
-        },
-        backButton: false,
-        noAnimation: true,
+      windowing.createWindow(ZoomedCardWindow, {
+        cardContent: currentState.question.tip,
+        isHintCard: true,
+        onSubmit: playCard2Sound,
+        onCancel: playCard2Sound,
       });
     } else {
       const card = currentState.choices.find((c) => c.content === cardKey);
       if (!card) return;
       playCard1Sound();
-      windowing.createWindow({
-        title: "Zoomed Card",
-        component: ZoomedCard,
-        props: {
-          cardContent: card.content,
-          isHintCard: false,
-          onSubmit: () => {
-            playCard2Sound();
-            battle.sendUserAction({ kind: "CardSubmit", wasCorrect: card.isCorrect });
-          },
-          onCancel: playCard2Sound,
+      windowing.createWindow(ZoomedCardWindow, {
+        cardContent: card.content,
+        isHintCard: false,
+        onSubmit: () => {
+          playCard2Sound();
+          battle.sendUserAction({ kind: "CardSubmit", wasCorrect: card.isCorrect });
         },
-        backButton: false,
-        noAnimation: true,
+        onCancel: playCard2Sound,
       });
     }
   }
@@ -118,7 +107,7 @@ export default function BattleView(props: BattleViewProps) {
           content: <p>Você venceu o duelo contra {BOSS_NAME}.</p>,
           buttons: { ok: "OK" },
         });
-        windowing.removeSpecificWindow(currentWindowKey);
+        windowing.removeWindow(currentWindowKey);
         props.onBattleDone?.(true);
       } else if (state instanceof GameOver) {
         setBackgroundSong(null);
@@ -127,7 +116,7 @@ export default function BattleView(props: BattleViewProps) {
           content: <p>Você perdeu o duelo contra {BOSS_NAME}.</p>,
           buttons: { ok: "OK" },
         });
-        windowing.removeSpecificWindow(currentWindowKey);
+        windowing.removeWindow(currentWindowKey);
         props.onBattleDone?.(false);
       }
     });
@@ -143,7 +132,7 @@ export default function BattleView(props: BattleViewProps) {
     });
     if (choice === "cancel") return;
     setTimeout(() => {
-      windowing.removeSpecificWindow(currentWindowKey);
+      windowing.removeWindow(currentWindowKey);
     }, 300);
   });
 

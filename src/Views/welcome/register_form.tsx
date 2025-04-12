@@ -10,6 +10,7 @@ import useAlert from "../../Components/AlertDialog";
 import { useGameState } from "../../Game/Data";
 import { useWindowing } from "../../Lib/compass_navigator";
 import HomeView from "../home_view";
+import { HomeWindow } from "../home_view/_windows";
 
 // Função auxiliar para validar o formato do e-mail
 function isValidEmail(email: string): boolean {
@@ -102,14 +103,8 @@ export default function RegisterForm() {
 
   useEffect(() => {
     if (game.data.userInfo !== null) {
-      windowing.windows.forEach((w) => windowing.removeSpecificWindow(w.key));
-      windowing.createWindow({
-        title: "Home View",
-        component: HomeView,
-        props: {},
-        backButton: false,
-        noAnimation: true,
-      });
+      windowing.windows.forEach((w) => windowing.removeWindow(w.key));
+      windowing.createWindow(HomeWindow, {});
     }
   }, [game.data]);
 

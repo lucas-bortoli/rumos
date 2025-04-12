@@ -2,8 +2,7 @@ import { useEffect } from "react";
 import { useGameState } from "./Game/Data";
 import { useWindowing } from "./Lib/compass_navigator";
 import { useTelemetry } from "./Lib/telemetry";
-import CardStudyView from "./Views/card_learning_view/study";
-import WelcomeView from "./Views/welcome";
+import { WelcomeWindow } from "./Views/welcome/_windows";
 
 export default function App() {
   const windowing = useWindowing();
@@ -17,27 +16,15 @@ export default function App() {
       kind: "WindowingToplevelChange",
       window: topmost
         ? {
-            title: topmost.title,
+            title: topmost.title ?? "<untitled window>",
           }
         : null,
     });
   }, [windowing.windows]);
 
   useEffect(() => {
-    //const key = windowing.createWindow({
-    //  component: CardStudyView,
-    //  props: { trail: null },
-    //  title: "Card Study View",
-    //  noAnimation: true,
-    //});
-    //return () => windowing.removeSpecificWindow(key);
-    const key = windowing.createWindow({
-      component: WelcomeView,
-      props: {},
-      title: "Welcome View",
-      noAnimation: true,
-    });
-    return () => windowing.removeSpecificWindow(key);
+    const key = windowing.createWindow(WelcomeWindow, {});
+    return () => windowing.removeWindow(key);
   }, []);
 
   return null;

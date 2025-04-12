@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Button from "../../Components/Button";
 import { useWindowing } from "../../Lib/compass_navigator";
 import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
 
@@ -11,7 +10,7 @@ export default function LoadingView() {
 
   function goToNext() {
     //windowing.createWindow({});
-    windowing.removeSpecificWindow(currentWindowKey);
+    windowing.removeWindow(currentWindowKey);
   }
 
   return (

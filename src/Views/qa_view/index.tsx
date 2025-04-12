@@ -3,27 +3,20 @@ import VirtualBackButton from "../../Components/VirtualBackButton";
 import { KnowledgeTrail } from "../../Game/Data/data";
 import { useWindowing } from "../../Lib/compass_navigator";
 import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
-import DocumentWhiteoutView from "./document";
+import { DocumentWhiteoutWindow } from "./_windows";
 import Img1 from "./icon.png";
 
-interface DocumentWhiteoutIntroductionViewProps {
+interface DocumentWhiteoutIntroProps {
   trail: KnowledgeTrail;
 }
 
-export default function DocumentWhiteoutIntroductionView(
-  props: DocumentWhiteoutIntroductionViewProps
-) {
+export default function DocumentWhiteoutIntro(props: DocumentWhiteoutIntroProps) {
   const windowing = useWindowing();
   const currentWindowKey = useCurrentWindowKey();
 
   function start() {
-    windowing.createWindow({
-      title: `Document Whiteout Game`,
-      component: DocumentWhiteoutView,
-      props: { trail: props.trail },
-      backButton: false,
-    });
-    windowing.removeSpecificWindow(currentWindowKey);
+    windowing.createWindow(DocumentWhiteoutWindow, { trail: props.trail });
+    windowing.removeWindow(currentWindowKey);
   }
 
   return (

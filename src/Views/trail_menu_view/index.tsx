@@ -1,21 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import useAlert from "../../Components/AlertDialog";
 import SvgIcon from "../../Components/SvgIcon";
 import VirtualBackButton from "../../Components/VirtualBackButton";
+import { useGameState } from "../../Game/Data";
 import { BOSS_NAME, KnowledgeTrail } from "../../Game/Data/data";
 import { useWindowing, WindowKey } from "../../Lib/compass_navigator";
-import BattleView from "../battle_view";
-import CardLearningView from "../card_learning_view";
-import DocumentWhiteoutIntroductionView from "../qa_view";
-import useAlert from "../../Components/AlertDialog";
-import FeedbackForm from "../welcome/feedback_form";
 import delay from "../../Lib/delay";
-import { useGameState } from "../../Game/Data";
+import BattleView from "../battle_view";
+import { CardLearningIntroWindow } from "../card_learning_view/_windows";
+import { DocumentWhiteoutIntroWindow } from "../qa_view/_windows";
+import { FeedbackFormWindow } from "../welcome/_windows";
+import { BattleContainerWindow } from "../battle_view/_windows";
 
-interface TrailMenuViewProps {
+interface TrailMenuProps {
   trail: KnowledgeTrail;
 }
 
-export default function TrailMenuView(props: TrailMenuViewProps) {
+export default function TrailMenu(props: TrailMenuProps) {
   const windowing = useWindowing();
   const childWindowRef = useRef<WindowKey | null>(null);
   const showAlert = useAlert();
@@ -30,48 +31,38 @@ export default function TrailMenuView(props: TrailMenuViewProps) {
       content: <p>Está gostando da plataforma? Por favor, nos diga o que você está achando.</p>,
       buttons: { ok: "OK" },
     });
-    const key = windowing.createWindow({
-      component: FeedbackForm,
-      props: { onSubmit: () => windowing.removeSpecificWindow(key) },
-      title: "Feedback Form View",
-      backButton: false,
+
+    const feedbackWindowKey = windowing.createWindow(FeedbackFormWindow, {
+      onSubmit: () => windowing.removeWindow(feedbackWindowKey),
     });
   }
 
   function onStudyClick() {
     if (childWindowRef.current) return;
-    childWindowRef.current = windowing.createWindow({
-      title: `Card Study Introduction View - ${props.trail.title}`,
-      component: CardLearningView,
-      props: { trail: props.trail },
+    childWindowRef.current = windowing.createWindow(CardLearningIntroWindow, {
+      trail: props.trail,
     });
   }
   function onPracticeClick() {
     if (childWindowRef.current) return;
-    childWindowRef.current = windowing.createWindow({
-      title: `Document Whiteout Introduction View - ${props.trail.title}`,
-      component: DocumentWhiteoutIntroductionView,
-      props: { trail: props.trail },
+    childWindowRef.current = windowing.createWindow(DocumentWhiteoutIntroWindow, {
+      trail: props.trail,
     });
   }
   function onDuelClick() {
     if (childWindowRef.current) return;
-    childWindowRef.current = windowing.createWindow({
-      title: `Duel - ${props.trail.title} - ${BOSS_NAME}`,
-      component: BattleView,
-      props: {
-        onBattleDone: async () => {
-          requestFeedback();
-        },
+
+    childWindowRef.current = windowing.createWindow(BattleContainerWindow, {
+      onBattleDone: async () => {
+        requestFeedback();
       },
-      backButton: false,
     });
   }
 
   useEffect(() => {
     return () => {
       if (childWindowRef.current) {
-        windowing.removeSpecificWindow(childWindowRef.current);
+        windowing.removeWindow(childWindowRef.current);
         childWindowRef.current = null;
       }
     };

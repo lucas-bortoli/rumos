@@ -1,10 +1,10 @@
 import { cn } from "../../Lib/class_names";
 import { useWindowing } from "../../Lib/compass_navigator";
 import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
-import FeedbackTabView from "../../Views/feedback_tab";
-import HomeView from "../../Views/home_view";
-import MarketplaceView from "../../Views/marketplace_view";
-import QuestsView from "../../Views/quests_view";
+import { FeedbackTabWindow } from "../../Views/feedback_tab/_windows";
+import { HomeWindow } from "../../Views/home_view/_windows";
+import { MarketplaceWindow } from "../../Views/marketplace_view/_windows";
+import { QuestsWindow } from "../../Views/quests_view/_windows";
 import SvgIcon, { SvgIconName } from "../SvgIcon";
 
 type Screen = "Home" | "Marketplace" | "Quests" | "Feedback";
@@ -22,42 +22,22 @@ export default function NavigationBarBottom(props: NavigationBarBottomProps) {
 
     switch (screen) {
       case "Home":
-        windowing.createWindow({
-          component: HomeView,
-          props: {},
-          title: "Minhas Trilhas",
-          noAnimation: true,
-        });
+        windowing.createWindow(HomeWindow, {});
         break;
       case "Marketplace":
-        windowing.createWindow({
-          component: MarketplaceView,
-          props: {},
-          title: "Marketplace",
-          noAnimation: true,
-        });
+        windowing.createWindow(MarketplaceWindow, {});
         break;
       case "Quests":
-        windowing.createWindow({
-          component: QuestsView,
-          props: {},
-          title: "Minhas Quests",
-          noAnimation: true,
-        });
+        windowing.createWindow(QuestsWindow, {});
         break;
       case "Feedback":
-        windowing.createWindow({
-          component: FeedbackTabView,
-          props: {},
-          title: "FeedbackTab",
-          noAnimation: true,
-        });
+        windowing.createWindow(FeedbackTabWindow, {});
         break;
       default:
         return;
     }
 
-    windowing.removeSpecificWindow(currentWindowKey);
+    windowing.removeWindow(currentWindowKey);
   }
 
   return (
