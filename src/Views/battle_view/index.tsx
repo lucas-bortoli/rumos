@@ -19,6 +19,7 @@ import useScrollingText from "./Hooks/use_scrolling_text";
 import { Battle, GameOver, UserTurn, Victory } from "./Logic";
 import style from "./style.module.css";
 import { ZoomedCardWindow } from "./_windows";
+import useProvideCurrentWindow from "../../Lib/compass_navigator/window_container/use_provide_current_window";
 
 interface BattleContainerProps {
   onBattleDone?: (playerWon: boolean) => void;
@@ -122,18 +123,16 @@ export default function BattleContainer(props: BattleContainerProps) {
     });
   }, [battle.state]);
 
-  useBackButtonHandler(async () => {
-    if (windowing.windows.at(-1)?.key !== currentWindowKey) return;
-
-    const choice = await showAlert({
-      title: "Desistir do duelo?",
-      content: <p>Deseja mesmo desistir do duelo?</p>,
-      buttons: { cancel: "Não", confirm: "Desistir" },
-    });
-    if (choice === "cancel") return;
-    setTimeout(() => {
-      windowing.removeWindow(currentWindowKey);
-    }, 300);
+  useProvideCurrentWindow({
+    backButtonHandler: async (killThisWindow) => {
+      const choice = await showAlert({
+        title: "Desistir do duelo?",
+        content: <p>Deseja mesmo desistir do duelo?</p>,
+        buttons: { cancel: "Não", confirm: "Desistir" },
+      });
+      if (choice === "cancel") return;
+      setTimeout(killThisWindow, 300);
+    },
   });
 
   const visibleDialog = useScrollingText(battle.state?.textBoxContent ?? "...", 8);

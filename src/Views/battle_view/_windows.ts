@@ -4,7 +4,7 @@ import ZoomedCard from "./Components/zoomed_card";
 
 export const BattleContainerWindow = manifest(BattleContainer, {
   initialTitle: () => "Duelo",
-  hasAnimation: false,
+  hasAnimation: true,
 });
 
 export const ZoomedCardWindow = manifest(ZoomedCard, {

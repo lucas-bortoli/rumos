@@ -10,10 +10,10 @@ export const WelcomeWindow = manifest(Welcome, {
 
 export const FeedbackFormWindow = manifest(FeedbackForm, {
   initialTitle: () => "Formulário de Feedback",
-  hasAnimation: false,
+  hasAnimation: true,
 });
 
 export const RegisterWindow = manifest(RegisterForm, {
   initialTitle: () => "Formulário de Registro",
-  hasAnimation: false,
+  hasAnimation: true,
 });

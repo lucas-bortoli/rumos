@@ -5,6 +5,7 @@ import Deferred from "../../Lib/deferred";
 import { Sequence } from "../../Lib/sequence_generator";
 import Button from "../Button";
 import Frame from "../Frame";
+import useProvideCurrentWindow from "../../Lib/compass_navigator/window_container/use_provide_current_window";
 
 interface AlertDialogProps extends PropsWithChildren {
   title: string;
@@ -39,6 +40,10 @@ const variants = {
 };
 
 function AlertDialog<ActionKeys extends string>(props: AlertDialogProps) {
+  useProvideCurrentWindow({
+    backButtonHandler: () => "Ignore",
+  });
+
   return (
     <div className="h-full w-full bg-white/20 backdrop-blur-sm">
       <MotionFrame

@@ -4,10 +4,10 @@ import CardLearning from "./study";
 
 export const CardLearningIntroWindow = manifest(CardLearningIntro, {
   initialTitle: (props) => `Estudo das Cartas - Explicação: ${props.trail.title}`,
-  hasAnimation: false,
+  hasAnimation: true,
 });
 
 export const CardLearningWindow = manifest(CardLearning, {
   initialTitle: (props) => `Estudo das Cartas: ${props.trail.title}`,
-  hasAnimation: false,
+  hasAnimation: true,
 });

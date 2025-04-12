@@ -1,47 +1,18 @@
-import { motion, Variant } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import useAlert from "../../Components/AlertDialog";
+import Button from "../../Components/Button";
 import DocumentArticle from "../../Components/DocumentArticle";
-import Frame from "../../Components/Frame";
+import SvgIcon from "../../Components/SvgIcon";
+import VirtualBackButton from "../../Components/VirtualBackButton";
 import { DOCUMENT_CONTRACT_HTML, KnowledgeTrail } from "../../Game/Data/data";
 import { cn } from "../../Lib/class_names";
+import useProvideCurrentWindow from "../../Lib/compass_navigator/window_container/use_provide_current_window";
 import { addListener, removeListener } from "../../Lib/event_manager";
 import findElementInParents from "../../Lib/find_element_in_parents";
-import qaStyle from "./qa.module.css";
-import VirtualBackButton from "../../Components/VirtualBackButton";
-import generateUUID from "../../Lib/uuid";
 import { useMap } from "../../Lib/use_map";
-import { useBackButtonHandler } from "../../Lib/back_button";
-import { useWindowing } from "../../Lib/compass_navigator";
-import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
-import useAlert from "../../Components/AlertDialog";
-import SvgIcon from "../../Components/SvgIcon";
-import Button from "../../Components/Button";
-
-const MotionFrame = motion.create(Frame);
-
-const variants = {
-  enter: {
-    translateY: "150%",
-    opacity: 0.7,
-  } satisfies Variant,
-  active: {
-    translateY: 0,
-    opacity: 1,
-    transition: {
-      type: "spring",
-      stiffness: 300,
-      damping: 30,
-      duration: 0.15,
-    },
-  } satisfies Variant,
-  exit: {
-    translateY: "150%",
-    transition: {
-      ease: "easeIn",
-      duration: 0.2,
-    },
-  } satisfies Variant,
-};
+import generateUUID from "../../Lib/uuid";
+import qaStyle from "./qa.module.css";
 
 type ChoiceId = string & { _tag?: "choiceId" };
 
@@ -84,11 +55,6 @@ export default function DocumentWhiteout(props: DocumentWhiteoutProps) {
     if (article === null) return;
 
     article.innerHTML = DOCUMENT_CONTRACT_HTML;
-
-    //@ts-expect-error
-    window.article = article;
-    //s@ts-expect-error
-    //window.setDeckVisible = setDeckVisible;
 
     const $whiteouts = [...article.querySelectorAll("whiteout")] as HTMLElement[];
 
@@ -232,24 +198,18 @@ export default function DocumentWhiteout(props: DocumentWhiteoutProps) {
     });
   }
 
-  //@ts-expect-error
-  window.doValidate = doValidate;
-
-  const windowing = useWindowing();
-  const currentWindowKey = useCurrentWindowKey();
   const showAlert = useAlert();
-  useBackButtonHandler(async () => {
-    if (windowing.windows.at(-1)?.key !== currentWindowKey) return;
 
-    const choice = await showAlert({
-      title: "Sair mesmo?",
-      content: <p>O preenchimento do documento será perdido.</p>,
-      buttons: { cancel: "Não", confirm: "Sair" },
-    });
-    if (choice === "cancel") return;
-    setTimeout(() => {
-      windowing.removeWindow(currentWindowKey);
-    }, 300);
+  useProvideCurrentWindow({
+    backButtonHandler: async (killThisWindow) => {
+      const choice = await showAlert({
+        title: "Sair mesmo?",
+        content: <p>O preenchimento do documento será perdido.</p>,
+        buttons: { cancel: "Não", confirm: "Sair" },
+      });
+      if (choice === "cancel") return;
+      setTimeout(killThisWindow, 300);
+    },
   });
 
   const [footerExpanded, setFooterExpanded] = useState(true);
