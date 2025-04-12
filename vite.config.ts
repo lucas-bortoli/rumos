@@ -7,4 +7,15 @@ import svgr from "vite-plugin-svgr";
 export default defineConfig({
   plugins: [react(), tailwindcss(), svgr()],
   envDir: ".",
+  root: "src",
+  build: {
+    outDir: "../dist",
+    emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        app: "./src/app.html",
+        index: "./src/index.html",
+      },
+    },
+  },
 });

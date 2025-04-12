@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rumos Mobile View</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overscroll-behavior-y: contain;
+        overflow: hidden;
+      }
+
+      .phone-wrapper {
+        min-width: 320px;
+        height: calc(100svh - 4rem);
+        aspect-ratio: 9 / 20;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 0;
+        overflow: hidden;
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .phone-wrapper iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      @media screen and (max-width: 480px) {
+        .phone-wrapper {
+          height: 100svh;
+          width: 100svw;
+        }
+      }
+
+      @media (prefers-color-scheme: dark) {
+        html,
+        body {
+          background-color: #323232;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="phone-wrapper">
+      <iframe src="/app.html"></iframe>
+    </div>
+
+    <script>
+      /**
+       * Checks if the current browser is a mobile browser.
+       *
+       * @returns {boolean} True if the browser is a mobile browser, false otherwise.
+       */
+      function isMobileBrowser() {
+        // Check the user agent string for common mobile identifiers.
+        const userAgent = navigator.userAgent.toLowerCase();
+        return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+      }
+
+      if (isMobileBrowser()) {
+        location.href = document.querySelector("iframe").src;
+      }
+    </script>
+  </body>
+</html>
