@@ -1,10 +1,12 @@
 import { cn } from "../../Lib/class_names";
 import { useWindowing } from "../../Lib/compass_navigator";
 import useCurrentWindowKey from "../../Lib/compass_navigator/window_container/current_window_key_context";
-import { FeedbackTabWindow } from "../../Views/feedback_tab/_windows";
-import { HomeWindow } from "../../Views/home_view/_windows";
-import { MarketplaceWindow } from "../../Views/marketplace_view/_windows";
-import { QuestsWindow } from "../../Views/quests_view/_windows";
+import {
+  HomeWindow,
+  MarketplaceWindow,
+  QuestsWindow,
+  FeedbackTabWindow,
+} from "../../Views/main_menu/_windows";
 import SvgIcon, { SvgIconName } from "../SvgIcon";
 
 type Screen = "Home" | "Marketplace" | "Quests" | "Feedback";

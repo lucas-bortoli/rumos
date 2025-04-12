@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import NavigationBarBottom from "../../Components/NavigationBarBottom";
-import { cn } from "../../Lib/class_names";
-import { useBackgroundSong } from "../../Lib/sound/song_provider";
-import { MARKETPLACE_ITEMS } from "../../Game/Data/data";
+import NavigationBarBottom from "../../../Components/NavigationBarBottom";
+import { MARKETPLACE_ITEMS } from "../../../Game/Data/data";
+import { cn } from "../../../Lib/class_names";
+import { useBackgroundSong } from "../../../Lib/sound/song_provider";
 import style from "./style.module.css";
 
 export default function Marketplace() {

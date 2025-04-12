@@ -9,8 +9,7 @@ import { cn } from "../../Lib/class_names";
 import useAlert from "../../Components/AlertDialog";
 import { useGameState } from "../../Game/Data";
 import { useWindowing } from "../../Lib/compass_navigator";
-import HomeView from "../home_view";
-import { HomeWindow } from "../home_view/_windows";
+import { HomeWindow } from "../main_menu/_windows";
 
 // Função auxiliar para validar o formato do e-mail
 function isValidEmail(email: string): boolean {

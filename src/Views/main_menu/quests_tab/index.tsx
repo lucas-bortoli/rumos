@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
-import NavigationBarBottom from "../../Components/NavigationBarBottom";
-import { cn } from "../../Lib/class_names";
-import { ACHIEVEMENTS } from "../../Game/Data/data";
+import NavigationBarBottom from "../../../Components/NavigationBarBottom";
+import SvgIcon from "../../../Components/SvgIcon";
+import { ACHIEVEMENTS } from "../../../Game/Data/data";
+import { cn } from "../../../Lib/class_names";
 import style from "./style.module.css";
-import SvgIcon from "../../Components/SvgIcon";
 
 export default function Quests() {
   return (

@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
-import useAlert from "../../Components/AlertDialog";
-import NavigationBarBottom from "../../Components/NavigationBarBottom";
-import { KNOWLEDGE_TRAIL_CATEGORIES, KNOWLEDGE_TRAILS } from "../../Game/Data/data";
-import { cn } from "../../Lib/class_names";
-import { useWindowing } from "../../Lib/compass_navigator";
-import { useBackgroundSong } from "../../Lib/sound/song_provider";
-import { TrailMenuWindow } from "../trail_menu_view/_windows";
+import useAlert from "../../../Components/AlertDialog";
+import NavigationBarBottom from "../../../Components/NavigationBarBottom";
+import { KNOWLEDGE_TRAIL_CATEGORIES, KNOWLEDGE_TRAILS } from "../../../Game/Data/data";
+import { cn } from "../../../Lib/class_names";
+import { useWindowing } from "../../../Lib/compass_navigator";
+import { useBackgroundSong } from "../../../Lib/sound/song_provider";
+import { TrailMenuWindow } from "../../trail_menu_view/_windows";
 import style from "./style.module.css";
 
 export default function Home() {

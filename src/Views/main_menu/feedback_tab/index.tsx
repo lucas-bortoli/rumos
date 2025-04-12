@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import Button from "../../Components/Button";
-import NavigationBarBottom from "../../Components/NavigationBarBottom";
-import { useWindowing } from "../../Lib/compass_navigator";
-import { FeedbackFormWindow } from "../welcome/_windows";
+import Button from "../../../Components/Button";
+import NavigationBarBottom from "../../../Components/NavigationBarBottom";
+import { useWindowing } from "../../../Lib/compass_navigator";
+import { FeedbackFormWindow } from "../../welcome/_windows";
 
 export default function FeedbackTab() {
   const windowing = useWindowing();
