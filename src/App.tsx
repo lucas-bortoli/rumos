@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useGameState } from "./Game/Data";
 import { useWindowing } from "./Lib/compass_navigator";
 import { useTelemetry } from "./Lib/telemetry";
-import { WelcomeWindow } from "./Views/welcome/_windows";
+import { LoadingScreenWindow } from "./Views/loading/_windows";
 
 export default function App() {
   const windowing = useWindowing();
@@ -23,7 +23,7 @@ export default function App() {
   }, [windowing.windows]);
 
   useEffect(() => {
-    const key = windowing.createWindow(WelcomeWindow, {});
+    const key = windowing.createWindow(LoadingScreenWindow, {});
     return () => windowing.removeWindow(key);
   }, []);
 

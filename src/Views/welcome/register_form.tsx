@@ -34,7 +34,7 @@ export default function RegisterForm() {
     // Validação do nome
     if (!name) {
       return showAlert({
-        title: "Erro",
+        title: "Campo Vazio",
         content: "Por favor, preencha o campo nome.",
         buttons: { ok: "OK" },
       });
@@ -43,13 +43,13 @@ export default function RegisterForm() {
     // Validação do email
     if (!email) {
       return showAlert({
-        title: "Erro",
+        title: "Campo Vazio",
         content: "Por favor, preencha o campo e-mail.",
         buttons: { ok: "OK" },
       });
     } else if (!isValidEmail(email)) {
       return showAlert({
-        title: "Erro",
+        title: "Campo Vazio",
         content: "Por favor, insira um e-mail válido.",
         buttons: { ok: "OK" },
       });
@@ -58,7 +58,7 @@ export default function RegisterForm() {
     // Validação da idade
     if (age < 13 || age > 120) {
       return showAlert({
-        title: "Erro",
+        title: "Campo Vazio",
         content: "Por favor, insira uma idade entre 13 e 120.",
         buttons: { ok: "OK" },
       });
@@ -67,7 +67,7 @@ export default function RegisterForm() {
     // Validação do gênero
     if (!gender) {
       return showAlert({
-        title: "Erro",
+        title: "Campo Vazio",
         content: "Por favor, selecione o seu gênero.",
         buttons: { ok: "OK" },
       });
@@ -76,7 +76,7 @@ export default function RegisterForm() {
     // Validação da fonte de distribuição
     if (!distributionSource) {
       return showAlert({
-        title: "Erro",
+        title: "Campo Vazio",
         content: "Por favor, selecione como você ficou sabendo do aplicativo.",
         buttons: { ok: "OK" },
       });
@@ -131,7 +131,7 @@ export default function RegisterForm() {
       </section>
       <section className="flex gap-4">
         <section className="flex grow basis-0 flex-col items-stretch">
-          <label>Qual a sua idade?</label>
+          <label>Sua idade</label>
           <div className="relative flex">
             <TextField
               className="w-full grow !pr-18 text-right"
@@ -147,7 +147,7 @@ export default function RegisterForm() {
           </div>
         </section>
         <section className="flex grow basis-0 flex-col items-stretch">
-          <label>Qual o seu gênero?</label>
+          <label>Seu gênero</label>
           <ComboBox value={gender} onChange={setGender}>
             <ComboBoxOption kind="option" value="masculino">
               Masculino

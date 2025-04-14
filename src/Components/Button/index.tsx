@@ -27,7 +27,7 @@ export default function Button(props: ButtonProps) {
       {...props}
       onClick={onClick}
       className={cn(
-        "rounded-sm bg-gray-100 px-8 py-2 font-semibold shadow-sm",
+        "shadow-pixel-sm border-grey-900 bg-grey-100 border px-8 py-2 font-semibold",
         style.button,
         props.className
       )}

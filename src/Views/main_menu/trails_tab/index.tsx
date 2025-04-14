@@ -50,9 +50,9 @@ export default function Home() {
             {KNOWLEDGE_TRAILS.filter((t) => t.categoryId === category.id).map((trail) => (
               <motion.li
                 key={trail.id}
-                whileTap={trail.isEnabled ? { scale: 1.05 } : undefined}
+                whileTap={trail.isEnabled ? { scale: 1.02 } : undefined}
                 className={cn(
-                  "mr-2 flex aspect-[3/4] h-full shrink-0 flex-col justify-end overflow-hidden rounded-2xl p-4 text-gray-100 shadow-md",
+                  "mr-2 flex aspect-[3/4] h-full shrink-0 flex-col justify-end overflow-hidden rounded-md p-4 text-gray-100 shadow-md",
                   !trail.isEnabled && "opacity-20 shadow-none",
                   style.trilha_card
                 )}

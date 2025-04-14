@@ -42,7 +42,7 @@ export default function WindowContainer<W extends Window<any>>(props: WindowCont
 
   return (
     <motion.div
-      className="absolute top-0 left-0 h-full w-full"
+      className="absolute top-0 left-0 h-full w-full overflow-hidden"
       style={{ zIndex: props.zIndex }}
       data-window-key={props.window.key}
       initial="enter"

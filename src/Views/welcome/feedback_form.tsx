@@ -43,7 +43,7 @@ export default function FeedbackForm(props: FeedbackFormProps) {
     // Validation (add more as needed)
     if (!overallSatisfaction) {
       return showAlert({
-        title: "Erro",
+        title: "Campo Vazio",
         content: "Por favor, avalie sua satisfação geral.",
         buttons: { ok: "OK" },
       });
@@ -51,7 +51,7 @@ export default function FeedbackForm(props: FeedbackFormProps) {
 
     if (navigationIntuitive === "nao" && !navigationDifficulty) {
       return showAlert({
-        title: "Erro",
+        title: "Campo Vazio",
         content: "Por favor, descreva as dificuldades de navegação.",
         buttons: { ok: "OK" },
       });
